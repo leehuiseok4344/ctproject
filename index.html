@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>DNA 염기 서열 추론 - 컴퓨팅 사고 기반 활동</title>
+  <style>
+    body { font-family: 'Arial', sans-serif'; background: #f4f4f4; padding: 20px; }
+    h1 { color: #333; }
+    .tab { display: none; padding: 20px; background: #fff; border: 1px solid #ccc; border-top: none; }
+    .tab-buttons button {
+      padding: 10px 20px; margin-right: 10px;
+      border: 1px solid #ccc; background: #eee; cursor: pointer;
+    }
+    .tab-buttons button.active { background: #fff; border-bottom: none; font-weight: bold; }
+    .seq { font-family: monospace; font-size: 18px; }
+    .base-input { width: 25px; text-align: center; }
+    input[type="text"] { padding: 5px; font-size: 16px; }
+    #result, #abstraction-result, #decomposition-result { margin-top: 15px; }
+  </style>
+</head>
+<body>
+
+<h1>DNA 염기 서열 추론하기 - 컴퓨팅 사고 기반</h1>
+<div class="tab-buttons">
+  <button onclick="showTab('decomposition')" id="btn-decomposition">문제 분해</button>
+  <button onclick="showTab('abstraction')" id="btn-abstraction">추상화</button>
+  <button onclick="showTab('pattern')" id="btn-pattern">패턴 및 규칙 찾기</button>
+</div>
+
+<!-- 문제 분해 -->
+<div class="tab" id="decomposition">
+  <h2>🧩 문제 분해</h2>
+  <p>문제 조건을 입력하여 나만의 문제를 만들어 봅니다.</p>
+  <label>염기 서열 길이: <input type="number" id="decomp-length" min="4" max="20" value="8"></label>
+  <br><br>
+  <button onclick="generateDecomposition()">문제 생성</button>
+  <div id="decomposition-result"></div>
+</div>
+
+<!-- 추상화 -->
+<div class="tab" id="abstraction">
+  <h2>🧊 추상화</h2>
+  <p>다음 염기서열에서 핵심 규칙만을 남기고 불필요한 정보를 제거해 보세요.</p>
+  <p><strong>문제:</strong> 다음 서열 중 G-C 규칙을 따르지 않는 쌍을 찾아보세요.</p>
+  <div class="seq" id="abstraction-question"></div>
+  <br>
+  <label>틀린 위치 번호 입력 (0부터 시작, 쉼표로 구분):<br>
+    <input type="text" id="abstraction-answer" placeholder="예: 2,5,7">
+  </label>
+  <br><br>
+  <button onclick="checkAbstraction()">정답 제출</button>
+  <div id="abstraction-result"></div>
+</div>
+
+<!-- 패턴 -->
+<div class="tab" id="pattern">
+  <h2>🔁 패턴 및 규칙 찾기</h2>
+  <p>가려진 부분의 염기를 추론해 보세요. A↔T, G↔C 규칙을 사용하세요.</p>
+  <div class="seq" id="pattern-top"></div>
+  <div class="seq" id="pattern-bottom"></div>
+  <br>
+  <button onclick="submitPattern()">정답 제출</button>
+  <div id="result"></div>
+</div>
+
+<script>
+  let currentTop = '';
+  let maskedIndices = [];
+
+  const basePair = { 'A': 'T', 'T': 'A', 'G': 'C', 'C': 'G' };
+
+  function showTab(id) {
+    document.querySelectorAll('.tab').forEach(tab => tab.style.display = 'none');
+    document.querySelectorAll('.tab-buttons button').forEach(btn => btn.classList.remove('active'));
+    document.getElementById(id).style.display = 'block';
+    document.getElementById('btn-' + id).classList.add('active');
+
+    if (id === 'abstraction') generateAbstraction();
+    if (id === 'pattern') startPattern();
+  }
+
+  // 문제 분해
+  function generateDecomposition() {
+    const len = parseInt(document.getElementById('decomp-length').value);
+    const seq = Array.from({ length: len }, () => randomBase()).join('');
+    document.getElementById('decomposition-result').innerHTML = `
+      <p><strong>생성된 문제:</strong> DNA 서열: ${seq}</p>
+      <p>이 서열의 상보적 가닥을 구하고, 규칙을 설명해보세요.</p>
+    `;
+  }
+
+  // 추상화
+  function generateAbstraction() {
+    const bases = ['G', 'C'];
+    let top = '';
+    let bottom = '';
+    for (let i = 0; i < 10; i++) {
+      const b = bases[Math.floor(Math.random() * bases.length)];
+      top += b;
+      bottom += Math.random() < 0.7 ? basePair[b] : randomBase();  // 일부 오류 삽입
+    }
+    document.getElementById('abstraction-question').textContent = `Top: ${top} / Bottom: ${bottom}`;
+    document.getElementById('abstraction-answer').value = '';
+    document.getElementById('abstraction-result').innerHTML = '';
+    document.getElementById('abstraction-question').dataset.top = top;
+    document.getElementById('abstraction-question').dataset.bottom = bottom;
+  }
+
+  function checkAbstraction() {
+    const top = document.getElementById('abstraction-question').dataset.top;
+    const bottom = document.getElementById('abstraction-question').dataset.bottom;
+    let wrong = [];
+    for (let i = 0; i < top.length; i++) {
+      if (basePair[top[i]] !== bottom[i]) wrong.push(i);
+    }
+    const userInput = document.getElementById('abstraction-answer').value.split(',').map(x => parseInt(x.trim())).filter(x => !isNaN(x));
+    const correctCount = userInput.filter(x => wrong.includes(x)).length;
+    const result = `총 ${wrong.length}개의 오류 중 ${correctCount}개를 정확히 찾았습니다.`;
+    document.getElementById('abstraction-result').innerHTML = result;
+  }
+
+  // 패턴
+  function startPattern() {
+    const length = 10;
+    currentTop = '';
+    maskedIndices = [];
+    let topHTML = '';
+    let bottomHTML = '';
+    for (let i = 0; i < length; i++) {
+      const base = randomBase();
+      currentTop += base;
+      const isMasked = Math.random() < 0.3;
+      if (isMasked) {
+        topHTML += `<input type="text" maxlength="1" class="base-input" data-index="${i}" />`;
+        maskedIndices.push(i);
+      } else {
+        topHTML += `<span>${base}</span>`;
+      }
+      bottomHTML += `<span>${basePair[base]}</span>`;
+    }
+    document.getElementById('pattern-top').innerHTML = `5′– ${topHTML} –3′`;
+    document.getElementById('pattern-bottom').innerHTML = `3′– ${bottomHTML} –5′`;
+    document.getElementById('result').innerHTML = '';
+  }
+
+  function submitPattern() {
+    let correct = 0;
+    maskedIndices.forEach(i => {
+      const input = document.querySelector(`input[data-index="${i}"]`);
+      const expected = currentTop[i];
+      const entered = input.value.toUpperCase();
+      if (entered === expected) {
+        input.style.border = '2px solid green';
+        correct++;
+      } else {
+        input.style.border = '2px solid red';
+      }
+    });
+    document.getElementById('result').innerHTML = `정답: ${correct} / ${maskedIndices.length} 개 맞춤`;
+  }
+
+  function randomBase() {
+    const b = ['A', 'T', 'G', 'C'];
+    return b[Math.floor(Math.random() * b.length)];
+  }
+
+  // 기본 탭 열기
+  showTab('decomposition');
+</script>
+
+</body>
+</html>
