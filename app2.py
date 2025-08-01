@@ -1,15 +1,16 @@
 import streamlit as st
+import streamlit.components.v1 as components
+import os
 
-st.set_page_config(page_title="CT 문제 해결", layout="centered")
+st.set_page_config(page_title="CT 문제 해결", layout="wide")
 
-# 사이드바 메뉴
-menu = st.sidebar.selectbox(
-    "문제를 선택하세요",
-    ["콘텐츠1: 이름으로 비밀번호 생성기", 
-     "콘텐츠2: 주식 평단가 계산하기"]
-     )
+# 사이드바 메뉴 구성
+menu = st.sidebar.selectbox("문제를 선택하세요", [
+    "콘텐츠1: 이름으로 비밀번호 생성기",
+    "콘텐츠2: 주식 평단가 계산하기",
+    "콘텐츠3: AI X PROJECT Platform"
+])
 
-# -----------------------------
 # 콘텐츠1: 이름으로 비밀번호 생성기
 # -----------------------------
 if menu == "콘텐츠1: 이름으로 비밀번호 생성기":
@@ -135,8 +136,9 @@ elif menu == "콘텐츠2: 주식 평단가 계산하기":
 
     st.markdown("---")
 
-    # ===== 2) 주식 평단가 계산하기 =====
-    st.subheader(" 직접 평단가 계산기 사용해보기")
+# ===== 2) 주식 평단가(물타기) 계산기 =====
+    
+    st.subheader("직접 평단가 계산기 사용해보기")
 
     num_trades = st.number_input("매수 횟수 선택", min_value=1, max_value=10, value=3, step=1, key="num_trade")
     total_cost, total_qty = 0, 0
@@ -155,7 +157,20 @@ elif menu == "콘텐츠2: 주식 평단가 계산하기":
 
     if total_qty > 0:
         avg_price = total_cost / total_qty
-        
+        st.success(f"💡 현재 평단가는 **{avg_price:,.0f}원** 입니다.")
+    else:
+        st.warning("❗ 수량을 입력하면 평단가가 계산됩니다.")
+
+# ✅ 콘텐츠3: HTML 파일 통합
+elif menu == "콘텐츠3: AI X PROJECT Platform":
+    st.title("🌐 AI X PROJECT Platform")
+    html_path = os.path.join(os.path.dirname(__file__), "AI.html")
+    try:
+        with open(html_path, 'r', encoding='utf-8') as f:
+            html_content = f.read()
+        components.html(html_content, height=1300, scrolling=True)
+    except FileNotFoundError:
+        st.error("⚠️ 'AI.html' 파일을 찾을 수 없습니다. 경로와 이름을 확인하세요.")
 
         
 
