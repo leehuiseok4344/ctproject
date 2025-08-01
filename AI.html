@@ -1,0 +1,2791 @@
+<!DOCTYPE html>
+<!-- saved from url=(0027)http://159.223.64.250:4500/ -->
+<html lang="en" class="h-full"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI+X Project Platform - Innovative Fusion Projects</title>
+    
+    <!-- Inter Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com/">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+    <link href="./AI_files/css2" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="./AI_files/saved_resource"></script>
+    
+    <!-- Tailwind Custom Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                        accent: {
+                            50: '#fef7ff',
+                            100: '#feeeff',
+                            200: '#fcddff',
+                            300: '#f9bbff',
+                            400: '#f388ff',
+                            500: '#ea55ff',
+                            600: '#d333ea',
+                            700: '#b820c7',
+                            800: '#981aa3',
+                            900: '#7c1c84',
+                        }
+                    },
+                    backgroundImage: {
+                        'gradient-primary': 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                        'gradient-accent': 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+                        'gradient-soft': 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)',
+                        'gradient-hero': 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'slide-up': 'slideUp 0.5s ease-out',
+                        'scale-in': 'scaleIn 0.3s ease-out',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        scaleIn: {
+                            '0%': { transform: 'scale(0.95)', opacity: '0' },
+                            '100%': { transform: 'scale(1)', opacity: '1' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="./AI_files/all.min.css">
+    
+    <!-- 수정된 챗봇 CSS + 메뉴 개선 -->
+    <style>
+        /* ⭐ z-index 체계 정리 ⭐ */
+        /* 
+        1000: 네비게이션 바
+        1100: 메가메뉴 및 드롭다운
+        1200: 모달, 오버레이
+        900: 플래시 메시지
+        800: 챗봇 버튼
+        700: 챗봇 컨테이너
+        */
+        
+        /* 네비게이션 바 z-index 설정 */
+        nav.sticky {
+            z-index: 1000 !important;
+        }
+        
+        /* ⭐ 메가메뉴 및 드롭다운 z-index 보장 + 호버 개선 ⭐ */
+        .nav-dropdown {
+            position: relative;
+        }
+        
+        .nav-dropdown .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1100 !important;
+            pointer-events: none;
+        }
+        
+        .nav-dropdown:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+        
+        /* 메가메뉴 호버 영역 확장 */
+        .nav-dropdown::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            z-index: 1;
+        }
+        
+        /* 드롭다운과 메뉴 사이의 간격 메우기 */
+        .dropdown-menu::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 0;
+            right: 0;
+            height: 10px;
+            background: transparent;
+        }
+        
+        /* 플래시 메시지 z-index */
+        .flash-messages {
+            z-index: 900 !important;
+        }
+        
+        /* ⭐ 챗봇 z-index 체계 - 드롭다운보다 낮게 설정 ⭐ */
+        .chatbot-button {
+            position: fixed !important;
+            bottom: 30px !important;
+            right: 25px !important;
+            width: 56px !important;
+            height: 56px !important;
+            border-radius: 50% !important;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+            color: white !important;
+            display: none !important;
+            align-items: center !important;
+            justify-content: center !important;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3) !important;
+            z-index: 800 !important; /* 드롭다운보다 낮음 */
+            cursor: pointer !important;
+            transition: all 0.3s ease !important;
+            border: none !important;
+        }
+        
+        .chatbot-button.show {
+            display: flex !important;
+        }
+        
+        .chatbot-button:hover {
+            background: linear-gradient(135deg, #5a67d8 0%, #6b5b95 100%) !important;
+            transform: scale(1.05) !important;
+            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4) !important;
+        }
+        
+        .chatbot-container {
+            position: fixed !important;
+            bottom: 100px !important;
+            right: 25px !important;
+            width: 380px !important;
+            height: 550px !important;
+            max-height: calc(100vh - 180px) !important;
+            background-color: white !important;
+            border-radius: 16px !important;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2) !important;
+            display: flex !important;
+            flex-direction: column !important;
+            z-index: 700 !important; /* 드롭다운보다 낮음 */
+            overflow: hidden !important;
+            transition: all 0.3s ease !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+            transform: translateY(20px) !important;
+        }
+        
+        .chatbot-container.active {
+            opacity: 1 !important;
+            pointer-events: auto !important;
+            transform: translateY(0) !important;
+        }
+        
+        /* ⭐ 챗봇이 열려있을 때 버튼 완전히 숨기기 */
+        .chatbot-container.active ~ .chatbot-button {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+        }
+        
+        .chatbot-header {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            padding: 16px 20px !important;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+            color: white !important;
+            border-radius: 16px 16px 0 0 !important;
+            flex-shrink: 0 !important;
+            position: relative !important;
+            z-index: 10 !important;
+        }
+        
+        .chatbot-header h3 {
+            margin: 0 !important;
+            font-size: 18px !important;
+            font-weight: 600 !important;
+        }
+        
+        .chatbot-close {
+            background: none !important;
+            border: none !important;
+            color: white !important;
+            font-size: 20px !important;
+            cursor: pointer !important;
+            padding: 4px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            transition: background-color 0.2s !important;
+            border-radius: 6px !important;
+            width: 32px !important;
+            height: 32px !important;
+            position: relative !important;
+            z-index: 20 !important;
+        }
+        
+        .chatbot-close:hover {
+            background: rgba(255, 255, 255, 0.1) !important;
+        }
+        
+        .chatbot-body {
+            flex: 1 !important;
+            padding: 16px !important;
+            overflow-y: auto !important;
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 12px !important;
+            background-color: #f9fafb !important;
+            min-height: 0 !important;
+            position: relative !important;
+            z-index: 1 !important;
+        }
+        
+        .chat-bubble {
+            max-width: 85% !important;
+            padding: 14px 16px !important;
+            border-radius: 18px !important;
+            margin-bottom: 8px !important;
+            position: relative !important;
+            word-wrap: break-word !important;
+            word-break: break-word !important;
+            animation: fadeIn 0.3s ease-out !important;
+            line-height: 1.4 !important;
+            z-index: 1 !important;
+        }
+        
+        .user-message {
+            align-self: flex-end !important;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+            color: white !important;
+            border-radius: 18px 18px 4px 18px !important;
+        }
+        
+        .bot-message {
+            align-self: flex-start !important;
+            background-color: #e2e8f0 !important;
+            color: #1e293b !important;
+            border-radius: 18px 18px 18px 4px !important;
+            position: relative !important;
+            padding-top: 28px !important;
+        }
+        
+        .bot-message-header {
+            display: flex !important;
+            justify-content: flex-end !important;
+            position: absolute !important;
+            top: 6px !important;
+            right: 8px !important;
+            opacity: 0 !important;
+            transition: opacity 0.2s ease !important;
+            z-index: 2 !important;
+        }
+        
+        .bot-message:hover .bot-message-header {
+            opacity: 1 !important;
+        }
+        
+        .copy-button {
+            background: rgba(255, 255, 255, 0.9) !important;
+            border: none !important;
+            border-radius: 4px !important;
+            width: 26px !important;
+            height: 26px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            cursor: pointer !important;
+            color: #4a5568 !important;
+            font-size: 12px !important;
+            transition: all 0.2s ease !important;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+            z-index: 3 !important;
+        }
+        
+        .copy-button:hover {
+            background: rgba(255, 255, 255, 1) !important;
+            color: #667eea !important;
+            transform: scale(1.05) !important;
+        }
+        
+        .response-content {
+            line-height: 1.5 !important;
+            font-size: 14px !important;
+        }
+        
+        .response-content strong {
+            font-weight: 600 !important;
+            color: #1f2937 !important;
+        }
+        
+        .response-content em {
+            font-style: italic !important;
+            color: #4b5563 !important;
+        }
+        
+        .response-content a {
+            color: #667eea !important;
+            text-decoration: underline !important;
+        }
+        
+        .response-content a:hover {
+            color: #5a67d8 !important;
+        }
+        
+        .message-time {
+            font-size: 11px !important;
+            margin-top: 6px !important;
+            opacity: 0.7 !important;
+            text-align: right !important;
+        }
+        
+        .user-message .message-time {
+            color: rgba(255, 255, 255, 0.8) !important;
+        }
+        
+        .bot-message .message-time {
+            color: #64748b !important;
+        }
+        
+        .chatbot-input {
+            display: flex !important;
+            padding: 16px 18px !important;
+            border-top: 1px solid #e5e7eb !important;
+            background-color: white !important;
+            gap: 12px !important;
+            flex-shrink: 0 !important;
+            align-items: center !important;
+            min-height: 72px !important;
+            position: relative !important;
+            z-index: 10 !important;
+        }
+        
+        .chatbot-input input {
+            flex: 1 !important;
+            border: 1px solid #d1d5db !important;
+            padding: 12px 16px !important;
+            border-radius: 24px !important;
+            background-color: #f3f4f6 !important;
+            font-size: 14px !important;
+            outline: none !important;
+            transition: all 0.2s ease !important;
+            height: 44px !important;
+            box-sizing: border-box !important;
+            z-index: 11 !important;
+        }
+        
+        .chatbot-input input:focus {
+            box-shadow: 0 0 0 2px #667eea !important;
+            background-color: white !important;
+            border-color: #667eea !important;
+        }
+        
+        .chatbot-input input:disabled {
+            background-color: #f9fafb !important;
+            color: #9ca3af !important;
+            cursor: not-allowed !important;
+        }
+        
+        .chatbot-input button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+            color: white !important;
+            border: none !important;
+            width: 44px !important;
+            height: 44px !important;
+            border-radius: 50% !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            cursor: pointer !important;
+            transition: all 0.2s ease !important;
+            flex-shrink: 0 !important;
+            z-index: 12 !important;
+        }
+        
+        .chatbot-input button:hover:not(:disabled) {
+            background: linear-gradient(135deg, #5a67d8 0%, #6b5b95 100%) !important;
+            transform: scale(1.05) !important;
+        }
+        
+        .chatbot-input button:disabled {
+            background: #d1d5db !important;
+            cursor: not-allowed !important;
+            transform: none !important;
+        }
+        
+        .typing-indicator {
+            display: flex !important;
+            padding: 14px 16px !important;
+            background-color: #e2e8f0 !important;
+            border-radius: 18px 18px 18px 4px !important;
+            align-self: flex-start !important;
+            width: fit-content !important;
+        }
+        
+        .typing-indicator span {
+            height: 8px !important;
+            width: 8px !important;
+            margin: 0 2px !important;
+            background-color: #64748b !important;
+            display: block !important;
+            border-radius: 50% !important;
+            opacity: 0.4 !important;
+        }
+        
+        .typing-indicator span:nth-of-type(1) {
+            animation: pulse 1s infinite 0.1s !important;
+        }
+        
+        .typing-indicator span:nth-of-type(2) {
+            animation: pulse 1s infinite 0.2s !important;
+        }
+        
+        .typing-indicator span:nth-of-type(3) {
+            animation: pulse 1s infinite 0.3s !important;
+        }
+        
+        @keyframes pulse {
+            0% {
+                opacity: 0.4;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
+            100% {
+                opacity: 0.4;
+                transform: scale(1);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* ⭐ 모바일 최적화 ⭐ */
+        @media (max-width: 640px) {
+            .chatbot-button {
+                bottom: 90px !important;
+                right: 15px !important;
+                width: 50px !important;
+                height: 50px !important;
+                font-size: 18px !important;
+                z-index: 800 !important;
+            }
+            
+            .chatbot-container {
+                width: calc(100vw - 20px) !important;
+                height: calc(100vh - 120px) !important;
+                max-height: calc(100vh - 120px) !important;
+                bottom: 10px !important;
+                left: 10px !important;
+                right: 10px !important;
+                border-radius: 12px !important;
+                z-index: 700 !important;
+            }
+            
+            .chatbot-container.active ~ .chatbot-button {
+                display: none !important;
+                visibility: hidden !important;
+                opacity: 0 !important;
+                pointer-events: none !important;
+            }
+            
+            .chatbot-header {
+                padding: 12px 16px !important;
+            }
+            
+            .chatbot-header h3 {
+                font-size: 16px !important;
+            }
+            
+            .chatbot-body {
+                padding: 12px !important;
+            }
+            
+            .chatbot-input {
+                padding: 12px 16px !important;
+                min-height: 60px !important;
+                gap: 10px !important;
+            }
+            
+            .chatbot-input input {
+                height: 40px !important;
+                padding: 10px 14px !important;
+                font-size: 16px !important;
+                border-radius: 20px !important;
+            }
+            
+            .chatbot-input button {
+                width: 40px !important;
+                height: 40px !important;
+                flex-shrink: 0 !important;
+            }
+            
+            .chat-bubble {
+                max-width: 90% !important;
+                padding: 12px 14px !important;
+                font-size: 14px !important;
+            }
+            
+            /* 모바일 메뉴 드롭다운 개선 */
+            .nav-dropdown .dropdown-menu {
+                position: static;
+                opacity: 1;
+                visibility: visible;
+                transform: none;
+                box-shadow: none;
+                border: none;
+                border-radius: 0;
+                background: #f9fafb;
+                margin-top: 0;
+            }
+        }
+        
+        @media (max-width: 375px) {
+            .chatbot-container {
+                width: calc(100vw - 10px) !important;
+                left: 5px !important;
+                right: 5px !important;
+                height: calc(100vh - 100px) !important;
+                max-height: calc(100vh - 100px) !important;
+            }
+            
+            .chatbot-button {
+                bottom: 80px !important;
+                right: 10px !important;
+                width: 45px !important;
+                height: 45px !important;
+            }
+        }
+        
+        @media (max-width: 640px) and (orientation: landscape) {
+            .chatbot-container {
+                height: calc(100vh - 80px) !important;
+                max-height: calc(100vh - 80px) !important;
+            }
+            
+            .chatbot-button {
+                bottom: 70px !important;
+            }
+        }
+        
+        @media (max-width: 640px) and (max-height: 500px) {
+            .chatbot-container {
+                height: calc(100vh - 60px) !important;
+                max-height: calc(100vh - 60px) !important;
+                bottom: 5px !important;
+            }
+            
+            .chatbot-button {
+                bottom: 60px !important;
+            }
+        }
+        
+        /* 스크롤바 스타일 */
+        .chatbot-body::-webkit-scrollbar {
+            width: 4px !important;
+        }
+        
+        .chatbot-body::-webkit-scrollbar-track {
+            background: #f1f5f9 !important;
+        }
+        
+        .chatbot-body::-webkit-scrollbar-thumb {
+            background: #cbd5e1 !important;
+            border-radius: 2px !important;
+        }
+        
+        .chatbot-body::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8 !important;
+        }
+
+        /* ⭐ 추가 CSS 클래스들 */
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-item {
+            transition: all 0.2s ease;
+        }
+
+        .feature-icon {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        /* 메가메뉴 배경 */
+        .dropdown-menu {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* ⭐ 메뉴 호버 개선 ⭐ */
+        .nav-dropdown .nav-item {
+            position: relative;
+        }
+        
+        .nav-dropdown .nav-item::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        
+        .nav-dropdown:hover .nav-item::after {
+            width: 100%;
+        }
+    </style>
+    
+    
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.inset-0{inset:0px}.-right-2{right:-0.5rem}.-top-2{top:-0.5rem}.left-3{left:0.75rem}.right-0{right:0px}.top-0{top:0px}.top-1\/2{top:50%}.-right-4{right:-1rem}.top-32{top:8rem}.col-span-1{grid-column:span 1 / span 1}.mx-auto{margin-left:auto;margin-right:auto}.my-1{margin-top:0.25rem;margin-bottom:0.25rem}.mb-1{margin-bottom:0.25rem}.mb-12{margin-bottom:3rem}.mb-2{margin-bottom:0.5rem}.mb-3{margin-bottom:0.75rem}.mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.ml-1{margin-left:0.25rem}.ml-2{margin-left:0.5rem}.mr-1{margin-right:0.25rem}.mr-2{margin-right:0.5rem}.mr-3{margin-right:0.75rem}.mb-16{margin-bottom:4rem}.mb-4{margin-bottom:1rem}.mt-3{margin-top:0.75rem}.mt-4{margin-top:1rem}.mt-8{margin-top:2rem}.line-clamp-3{overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3}.block{display:block}.flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.hidden{display:none}.h-16{height:4rem}.h-2{height:0.5rem}.h-20{height:5rem}.h-48{height:12rem}.h-8{height:2rem}.h-full{height:100%}.h-12{height:3rem}.h-3{height:0.75rem}.h-6{height:1.5rem}.min-h-screen{min-height:100vh}.w-2{width:0.5rem}.w-20{width:5rem}.w-48{width:12rem}.w-64{width:16rem}.w-8{width:2rem}.w-96{width:24rem}.w-full{width:100%}.w-12{width:3rem}.w-3{width:0.75rem}.w-6{width:1.5rem}.max-w-7xl{max-width:80rem}.max-w-lg{max-width:32rem}.max-w-3xl{max-width:48rem}.max-w-md{max-width:28rem}.flex-shrink-0{flex-shrink:0}.-translate-y-1\/2{--tw-translate-y:-50%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.transform{transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.cursor-pointer{cursor:pointer}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.flex-col{flex-direction:column}.items-start{align-items:flex-start}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.justify-items-center{justify-items:center}.gap-16{gap:4rem}.gap-4{gap:1rem}.gap-8{gap:2rem}.space-x-2 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.5rem * var(--tw-space-x-reverse));margin-left:calc(0.5rem * calc(1 - var(--tw-space-x-reverse)))}.space-x-3 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.75rem * var(--tw-space-x-reverse));margin-left:calc(0.75rem * calc(1 - var(--tw-space-x-reverse)))}.space-x-4 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(1rem * var(--tw-space-x-reverse));margin-left:calc(1rem * calc(1 - var(--tw-space-x-reverse)))}.space-x-8 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(2rem * var(--tw-space-x-reverse));margin-left:calc(2rem * calc(1 - var(--tw-space-x-reverse)))}.space-y-1 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.25rem * var(--tw-space-y-reverse))}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-x-6 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(1.5rem * var(--tw-space-x-reverse));margin-left:calc(1.5rem * calc(1 - var(--tw-space-x-reverse)))}.overflow-hidden{overflow:hidden}.rounded-2xl{border-radius:1rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-xl{border-radius:0.75rem}.rounded{border-radius:0.25rem}.border{border-width:1px}.border-2{border-width:2px}.border-t{border-top-width:1px}.border-none{border-style:none}.border-gray-100{--tw-border-opacity:1;border-color:rgb(243 244 246 / var(--tw-border-opacity, 1))}.border-gray-200{--tw-border-opacity:1;border-color:rgb(229 231 235 / var(--tw-border-opacity, 1))}.border-gray-300{--tw-border-opacity:1;border-color:rgb(209 213 219 / var(--tw-border-opacity, 1))}.border-purple-200{--tw-border-opacity:1;border-color:rgb(233 213 255 / var(--tw-border-opacity, 1))}.border-white{--tw-border-opacity:1;border-color:rgb(255 255 255 / var(--tw-border-opacity, 1))}.border-blue-200{--tw-border-opacity:1;border-color:rgb(191 219 254 / var(--tw-border-opacity, 1))}.border-gray-800{--tw-border-opacity:1;border-color:rgb(31 41 55 / var(--tw-border-opacity, 1))}.bg-gray-50{--tw-bg-opacity:1;background-color:rgb(249 250 251 / var(--tw-bg-opacity, 1))}.bg-gray-900{--tw-bg-opacity:1;background-color:rgb(17 24 39 / var(--tw-bg-opacity, 1))}.bg-purple-50{--tw-bg-opacity:1;background-color:rgb(250 245 255 / var(--tw-bg-opacity, 1))}.bg-purple-500{--tw-bg-opacity:1;background-color:rgb(168 85 247 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-yellow-400{--tw-bg-opacity:1;background-color:rgb(250 204 21 / var(--tw-bg-opacity, 1))}.bg-blue-100{--tw-bg-opacity:1;background-color:rgb(219 234 254 / var(--tw-bg-opacity, 1))}.bg-blue-50{--tw-bg-opacity:1;background-color:rgb(239 246 255 / var(--tw-bg-opacity, 1))}.bg-blue-500{--tw-bg-opacity:1;background-color:rgb(59 130 246 / var(--tw-bg-opacity, 1))}.bg-blue-600{--tw-bg-opacity:1;background-color:rgb(37 99 235 / var(--tw-bg-opacity, 1))}.bg-green-100{--tw-bg-opacity:1;background-color:rgb(220 252 231 / var(--tw-bg-opacity, 1))}.bg-green-50{--tw-bg-opacity:1;background-color:rgb(240 253 244 / var(--tw-bg-opacity, 1))}.bg-green-500{--tw-bg-opacity:1;background-color:rgb(34 197 94 / var(--tw-bg-opacity, 1))}.bg-green-600{--tw-bg-opacity:1;background-color:rgb(22 163 74 / var(--tw-bg-opacity, 1))}.bg-purple-100{--tw-bg-opacity:1;background-color:rgb(243 232 255 / var(--tw-bg-opacity, 1))}.bg-purple-600{--tw-bg-opacity:1;background-color:rgb(147 51 234 / var(--tw-bg-opacity, 1))}.bg-transparent{background-color:transparent}.bg-gradient-primary{background-image:linear-gradient(135deg, #667eea 0%, #764ba2 100%)}.bg-gradient-to-br{background-image:linear-gradient(to bottom right, var(--tw-gradient-stops))}.bg-gradient-to-r{background-image:linear-gradient(to right, var(--tw-gradient-stops))}.bg-gradient-accent{background-image:linear-gradient(135deg, #f093fb 0%, #f5576c 100%)}.from-blue-100{--tw-gradient-from:#dbeafe var(--tw-gradient-from-position);--tw-gradient-to:rgb(219 234 254 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-blue-200\/50{--tw-gradient-from:rgb(191 219 254 / 0.5) var(--tw-gradient-from-position);--tw-gradient-to:rgb(191 219 254 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-blue-50{--tw-gradient-from:#eff6ff var(--tw-gradient-from-position);--tw-gradient-to:rgb(239 246 255 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-gray-50{--tw-gradient-from:#f9fafb var(--tw-gradient-from-position);--tw-gradient-to:rgb(249 250 251 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.to-blue-50{--tw-gradient-to:#eff6ff var(--tw-gradient-to-position)}.to-purple-100{--tw-gradient-to:#f3e8ff var(--tw-gradient-to-position)}.to-purple-200\/50{--tw-gradient-to:rgb(233 213 255 / 0.5) var(--tw-gradient-to-position)}.to-purple-50{--tw-gradient-to:#faf5ff var(--tw-gradient-to-position)}.object-cover{object-fit:cover}.p-2{padding:0.5rem}.p-3{padding:0.75rem}.p-4{padding:1rem}.p-6{padding:1.5rem}.p-0{padding:0px}.p-8{padding:2rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-4{padding-left:1rem;padding-right:1rem}.px-8{padding-left:2rem;padding-right:2rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-20{padding-top:5rem;padding-bottom:5rem}.py-4{padding-top:1rem;padding-bottom:1rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.py-12{padding-top:3rem;padding-bottom:3rem}.py-16{padding-top:4rem;padding-bottom:4rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.pb-3{padding-bottom:0.75rem}.pl-10{padding-left:2.5rem}.pr-4{padding-right:1rem}.pt-2{padding-top:0.5rem}.pt-8{padding-top:2rem}.text-center{text-align:center}.font-inter{font-family:Inter, sans-serif}.text-2xl{font-size:1.5rem;line-height:2rem}.text-5xl{font-size:3rem;line-height:1}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-semibold{font-weight:600}.uppercase{text-transform:uppercase}.leading-relaxed{line-height:1.625}.leading-tight{line-height:1.25}.tracking-wide{letter-spacing:0.025em}.text-blue-500{--tw-text-opacity:1;color:rgb(59 130 246 / var(--tw-text-opacity, 1))}.text-gray-400{--tw-text-opacity:1;color:rgb(156 163 175 / var(--tw-text-opacity, 1))}.text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128 / var(--tw-text-opacity, 1))}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99 / var(--tw-text-opacity, 1))}.text-gray-700{--tw-text-opacity:1;color:rgb(55 65 81 / var(--tw-text-opacity, 1))}.text-gray-900{--tw-text-opacity:1;color:rgb(17 24 39 / var(--tw-text-opacity, 1))}.text-green-600{--tw-text-opacity:1;color:rgb(22 163 74 / var(--tw-text-opacity, 1))}.text-primary-600{--tw-text-opacity:1;color:rgb(2 132 199 / var(--tw-text-opacity, 1))}.text-purple-600{--tw-text-opacity:1;color:rgb(147 51 234 / var(--tw-text-opacity, 1))}.text-purple-800{--tw-text-opacity:1;color:rgb(107 33 168 / var(--tw-text-opacity, 1))}.text-purple-900{--tw-text-opacity:1;color:rgb(88 28 135 / var(--tw-text-opacity, 1))}.text-red-600{--tw-text-opacity:1;color:rgb(220 38 38 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-blue-600{--tw-text-opacity:1;color:rgb(37 99 235 / var(--tw-text-opacity, 1))}.text-blue-700{--tw-text-opacity:1;color:rgb(29 78 216 / var(--tw-text-opacity, 1))}.text-blue-800{--tw-text-opacity:1;color:rgb(30 64 175 / var(--tw-text-opacity, 1))}.text-green-500{--tw-text-opacity:1;color:rgb(34 197 94 / var(--tw-text-opacity, 1))}.text-green-700{--tw-text-opacity:1;color:rgb(21 128 61 / var(--tw-text-opacity, 1))}.text-green-800{--tw-text-opacity:1;color:rgb(22 101 52 / var(--tw-text-opacity, 1))}.text-purple-500{--tw-text-opacity:1;color:rgb(168 85 247 / var(--tw-text-opacity, 1))}.text-purple-700{--tw-text-opacity:1;color:rgb(126 34 206 / var(--tw-text-opacity, 1))}.opacity-60{opacity:0.6}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgb(0 0 0 / 0.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-xl{--tw-shadow:0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.transition-colors{transition-property:color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-opacity{transition-property:opacity;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-shadow{transition-property:box-shadow;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:bg-gray-100:hover{--tw-bg-opacity:1;background-color:rgb(243 244 246 / var(--tw-bg-opacity, 1))}.hover\:bg-gray-50:hover{--tw-bg-opacity:1;background-color:rgb(249 250 251 / var(--tw-bg-opacity, 1))}.hover\:bg-gray-800:hover{--tw-bg-opacity:1;background-color:rgb(31 41 55 / var(--tw-bg-opacity, 1))}.hover\:bg-red-50:hover{--tw-bg-opacity:1;background-color:rgb(254 242 242 / var(--tw-bg-opacity, 1))}.hover\:bg-blue-700:hover{--tw-bg-opacity:1;background-color:rgb(29 78 216 / var(--tw-bg-opacity, 1))}.hover\:bg-green-700:hover{--tw-bg-opacity:1;background-color:rgb(21 128 61 / var(--tw-bg-opacity, 1))}.hover\:bg-purple-700:hover{--tw-bg-opacity:1;background-color:rgb(126 34 206 / var(--tw-bg-opacity, 1))}.hover\:text-primary-600:hover{--tw-text-opacity:1;color:rgb(2 132 199 / var(--tw-text-opacity, 1))}.hover\:text-blue-600:hover{--tw-text-opacity:1;color:rgb(37 99 235 / var(--tw-text-opacity, 1))}.hover\:text-blue-700:hover{--tw-text-opacity:1;color:rgb(29 78 216 / var(--tw-text-opacity, 1))}.hover\:text-green-600:hover{--tw-text-opacity:1;color:rgb(22 163 74 / var(--tw-text-opacity, 1))}.hover\:text-green-700:hover{--tw-text-opacity:1;color:rgb(21 128 61 / var(--tw-text-opacity, 1))}.hover\:text-purple-600:hover{--tw-text-opacity:1;color:rgb(147 51 234 / var(--tw-text-opacity, 1))}.hover\:text-purple-700:hover{--tw-text-opacity:1;color:rgb(126 34 206 / var(--tw-text-opacity, 1))}.hover\:text-white:hover{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.hover\:opacity-90:hover{opacity:0.9}.hover\:shadow-lg:hover{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.focus\:border-transparent:focus{border-color:transparent}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.focus\:ring-2:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)}.focus\:ring-primary-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(14 165 233 / var(--tw-ring-opacity, 1))}@media (min-width: 640px){.sm\:flex-row{flex-direction:row}.sm\:px-6{padding-left:1.5rem;padding-right:1.5rem}}@media (min-width: 768px){.md\:col-span-2{grid-column:span 2 / span 2}.md\:mt-0{margin-top:0px}.md\:block{display:block}.md\:flex{display:flex}.md\:hidden{display:none}.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}.md\:flex-row{flex-direction:row}}@media (min-width: 1024px){.lg\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.lg\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.lg\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}.lg\:px-8{padding-left:2rem;padding-right:2rem}.lg\:text-6xl{font-size:3.75rem;line-height:1}}</style></head>
+<body class="font-inter bg-gray-50 text-gray-900">
+    <!-- Top Banner -->
+    <div class="bg-gradient-primary text-white py-2 text-center text-sm font-medium">
+        <div class="max-w-7xl mx-auto px-4 flex items-center justify-center space-x-4">
+            <span>🚀 AI+X Project Platform has just launched!</span>
+            
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg sticky top-0" style="z-index: 1000;">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="http://159.223.64.250:4500/" class="flex items-center space-x-2">
+                        <div class="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
+                            <i class="fas fa-brain text-white text-sm"></i>
+                        </div>
+                        <span class="text-xl font-bold gradient-text">AI+X Platform</span>
+                    </a>
+                </div>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <!-- Features Dropdown -->
+                    <div class="nav-dropdown">
+                        <button class="nav-item px-3 py-2 text-gray-700 hover:text-primary-600 font-medium flex items-center">
+                            Features
+                            <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </button>
+                        
+                        <!-- Mega Menu -->
+                        <div class="dropdown-menu w-96 p-6">
+                            <div class="grid grid-cols-1 gap-4">
+                                <div>
+                                    <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Core Features</h3>
+                                    <div class="space-y-3">
+                                        <a href="http://159.223.64.250:4500/brainbuildings" class="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                                            <div class="feature-icon w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0">
+                                                <i class="fas fa-lightbulb text-white text-sm"></i>
+                                            </div>
+                                            <div>
+                                                <div class="font-medium text-gray-900">Brain Building</div>
+                                                <div class="text-sm text-gray-500">4-stage idea development system</div>
+                                            </div>
+                                        </a>
+                                        
+                                        <a href="http://159.223.64.250:4500/projects" class="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                                            <div class="feature-icon w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0">
+                                                <i class="fas fa-project-diagram text-white text-sm"></i>
+                                            </div>
+                                            <div>
+                                                <div class="font-medium text-gray-900">Project Management</div>
+                                                <div class="text-sm text-gray-500">Systematic AI+X project management</div>
+                                            </div>
+                                        </a>
+                                        
+                                        
+                                        
+                                        <a href="http://159.223.64.250:4500/reflections" class="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                                            <div class="feature-icon w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0">
+                                                <i class="fas fa-journal-whills text-white text-sm"></i>
+                                            </div>
+                                            <div>
+                                                <div class="font-medium text-gray-900">Reflection Journal</div>
+                                                <div class="text-sm text-gray-500">Write and share learning reflections</div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Solutions Dropdown -->
+                    <div class="nav-dropdown">
+                        <button class="nav-item px-3 py-2 text-gray-700 hover:text-primary-600 font-medium flex items-center">
+                            Solutions
+                            <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </button>
+                        
+                        <div class="dropdown-menu w-64 p-6" style="opacity: 0; visibility: hidden; transform: translateY(-10px); pointer-events: none;">
+                            <div class="space-y-3">
+                                <a href="http://159.223.64.250:4500/solutions" class="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                                    <div class="feature-icon w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0">
+                                        <i class="fas fa-laptop-code text-white text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium text-gray-900">Browse Solutions</div>
+                                        <div class="text-sm text-gray-500">Discover AI+X software solutions</div>
+                                    </div>
+                                </a>
+                                
+                                
+                                <a href="http://159.223.64.250:4500/solution/create" class="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                                    <div class="feature-icon w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0">
+                                        <i class="fas fa-plus text-white text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium text-gray-900">Add Solution</div>
+                                        <div class="text-sm text-gray-500">Share your AI+X solution</div>
+                                    </div>
+                                </a>
+                                
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Resources Dropdown -->
+                    <div class="nav-dropdown">
+                        <button class="nav-item px-3 py-2 text-gray-700 hover:text-primary-600 font-medium flex items-center">
+                            Resources
+                            <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </button>
+                        
+                        <div class="dropdown-menu w-64 p-6">
+                            <div class="space-y-3">
+                                <a href="http://159.223.64.250:4500/resources" class="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                                    <div class="feature-icon w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0">
+                                        <i class="fas fa-book text-white text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium text-gray-900">Browse Resources</div>
+                                        <div class="text-sm text-gray-500">Access learning materials</div>
+                                    </div>
+                                </a>
+                                
+                                
+                                <a href="http://159.223.64.250:4500/resource/create" class="flex items-start space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                                    <div class="feature-icon w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0">
+                                        <i class="fas fa-upload text-white text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium text-gray-900">Upload Resource</div>
+                                        <div class="text-sm text-gray-500">Share learning materials</div>
+                                    </div>
+                                </a>
+                                
+                            </div>
+                        </div>
+                    </div>                    
+                    <!-- About -->
+                    <a href="http://159.223.64.250:4500/about" class="nav-item px-3 py-2 text-gray-700 hover:text-primary-600 font-medium">About</a>
+                </div>
+
+                <!-- User Actions -->
+                <div class="flex items-center space-x-4">
+                    <!-- Search -->
+                    <div class="hidden md:block">
+                        <form method="GET" action="http://159.223.64.250:4500/search" class="relative">
+                            <input type="text" name="q" placeholder="Search..." class="w-64 pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                            <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        </form>
+                    </div>
+
+                    
+                        <!-- User Dropdown -->
+                        <div class="nav-dropdown">
+                            <button class="flex items-center space-x-2 p-2 rounded-full hover:bg-gray-100 transition-colors">
+                                
+                                    <img src="./AI_files/avatar4.png" class="w-8 h-8 rounded-full object-cover" alt="Profile">
+                                
+                                <span class="hidden md:block font-medium text-gray-700">이휘석</span>
+                                <i class="fas fa-chevron-down text-xs text-gray-500"></i>
+                            </button>
+                            
+                            <div class="dropdown-menu right-0 w-48 py-2" style="opacity: 0; visibility: hidden; transform: translateY(-10px); pointer-events: none;">
+                                <a href="http://159.223.64.250:4500/auth/profile" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-50">
+                                    <i class="fas fa-user mr-3 text-gray-400"></i>
+                                    Profile
+                                </a>
+                                
+                                
+                                    <a href="http://159.223.64.250:4500/student/dashboard" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-50">
+                                        <i class="fas fa-tachometer-alt mr-3 text-gray-400"></i>
+                                        Dashboard
+                                    </a>
+                                
+                                
+                                <div class="border-t border-gray-100 my-1"></div>
+                                <a href="http://159.223.64.250:4500/auth/logout" class="flex items-center px-4 py-2 text-red-600 hover:bg-red-50">
+                                    <i class="fas fa-sign-out-alt mr-3"></i>
+                                    Sign Out
+                                </a>
+                            </div>
+                        </div>
+                    
+
+                    <!-- Mobile menu button -->
+                    <button class="md:hidden p-2 rounded-lg hover:bg-gray-100" id="mobile-menu-button">
+                        <i class="fas fa-bars text-gray-600"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile menu -->
+        <div class="md:hidden hidden" id="mobile-menu">
+            <div class="px-4 pt-2 pb-3 space-y-1 bg-white border-t border-gray-200">
+                <a href="http://159.223.64.250:4500/brainbuildings" class="block px-3 py-2 text-gray-700 hover:text-primary-600">Brain Building</a>
+                <a href="http://159.223.64.250:4500/projects" class="block px-3 py-2 text-gray-700 hover:text-primary-600">Projects</a>
+                <a href="http://159.223.64.250:4500/reflections" class="block px-3 py-2 text-gray-700 hover:text-primary-600">Reflection Journal</a>
+                <a href="http://159.223.64.250:4500/solutions" class="block px-3 py-2 text-gray-700 hover:text-primary-600">Solutions</a>
+                <a href="http://159.223.64.250:4500/resources" class="block px-3 py-2 text-gray-700 hover:text-primary-600">Resources</a>
+                
+                
+                <a href="http://159.223.64.250:4500/create" class="block px-3 py-2 text-primary-600 font-semibold">Create Content</a>
+                
+            </div>
+        </div>
+    </nav>
+
+    <!-- Flash Messages -->
+    
+        
+    
+
+    <!-- Main Content -->
+    <main class="">
+        
+<!-- Hero Section -->
+<section class="bg-gradient-to-br from-gray-50 to-blue-50 min-h-screen flex items-center" style="opacity: 1; transform: translateY(0px); transition: opacity 0.6s ease-out, transform 0.6s ease-out;">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <!-- Next-gen badge -->
+        <div class="flex items-center mb-8">
+            <div class="flex items-center bg-gray-900 text-white px-4 py-2 rounded-full text-sm font-medium">
+                <div class="w-2 h-2 bg-yellow-400 rounded-full mr-3"></div>
+                Next-gen AI+X experiences
+                <i class="fas fa-chevron-right ml-2 text-xs"></i>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <!-- Left Content -->
+            <div>
+                <h1 class="text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+                    Projects that scale.<br>
+                    <span class="text-gray-700">Ideas that</span><br>
+                    <span class="text-gray-700">innovate.</span>
+                </h1>
+                
+                <p class="text-xl text-gray-600 mb-8 leading-relaxed max-w-lg">
+                    While other platforms slow you down, we set you free. 
+                    We take the stress out of managing AI+X projects—
+                    because complexity doesn't belong here.
+                </p>
+                
+                <div class="mb-12">
+                    
+                    <a href="http://159.223.64.250:4500/student/dashboard" class="inline-flex items-center justify-center px-8 py-4 bg-gray-900 text-white font-semibold rounded-xl hover:bg-gray-800 transition-colors">
+                        Go to Dashboard
+                    </a>
+                    
+                </div>
+            </div>
+            
+            <!-- Right Dashboard Mockup -->
+            <div class="relative">
+                <div class="relative">
+                    <!-- Main Dashboard Container -->
+                    <div class="bg-white rounded-2xl shadow-2xl p-6 border border-gray-200">
+                        <!-- Person Image Placeholder -->
+                        <div class="relative mb-6">
+                            <div class="w-full h-48 bg-gradient-to-br from-blue-100 to-purple-100 rounded-xl flex items-center justify-center relative overflow-hidden">
+                                <div class="absolute inset-0 bg-gradient-to-br from-blue-200/50 to-purple-200/50"></div>
+                                <div class="relative text-center">
+                                    <div class="w-20 h-20 bg-white rounded-full mx-auto mb-3 flex items-center justify-center shadow-lg">
+                                        <i class="fas fa-brain text-primary-600 text-2xl"></i>
+                                    </div>
+                                    <p class="text-gray-700 font-semibold">AI+X Innovation</p>
+                                </div>
+                            </div>
+                            
+                            <!-- AI Assistant Badge -->
+                            <div class="absolute -top-2 -right-2 bg-purple-500 text-white px-3 py-1 rounded-full text-sm font-medium border-2 border-white shadow-lg">
+                                <i class="fas fa-robot mr-1"></i>AI Assistant
+                            </div>
+                        </div>
+                        
+                        <!-- Project Metrics -->
+                        <div class="space-y-4">
+                            <!-- Success Rate -->
+                            <div class="bg-purple-50 rounded-lg p-4 border border-purple-200">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-sm font-medium text-purple-800">Success Rate</span>
+                                    <span class="text-xs text-purple-600">Last 30 days</span>
+                                </div>
+                                <div class="text-2xl font-bold text-purple-900 mb-1">89.2%</div>
+                                <div class="flex items-center text-sm text-green-600">
+                                    <i class="fas fa-arrow-up mr-1"></i>
+                                    <span>+12.3%</span>
+                                </div>
+                            </div>
+                            
+                            <!-- AI Assistant Integration -->
+                            <div class="border rounded-lg p-4 bg-gradient-to-r from-blue-50 to-purple-50">
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="text-sm font-medium text-gray-700">
+                                        <i class="fas fa-robot mr-2 text-blue-500"></i>AI Assistant
+                                    </span>
+                                    <span class="text-xs text-green-600 font-medium">Active</span>
+                                </div>
+                                
+                                <button onclick="openChatbot()" class="w-full bg-gradient-primary text-white py-2 px-4 rounded-lg text-sm font-medium hover:opacity-90 transition-opacity">
+                                    Ask AI Assistant
+                                </button>
+                                
+                            </div>
+                            
+                            <!-- Features List -->
+                            <div class="space-y-2">
+                                <div class="flex items-center text-sm text-gray-600">
+                                    <i class="fas fa-magic text-blue-500 mr-3"></i>
+                                    Smart Project Suggestions
+                                </div>
+                                <div class="flex items-center text-sm text-gray-600">
+                                    <i class="fas fa-chart-bar text-green-500 mr-3"></i>
+                                    Real-time Analytics
+                                </div>
+                                <div class="flex items-center text-sm text-gray-600">
+                                    <i class="fas fa-comments text-purple-500 mr-3"></i>
+                                    AI-Powered Assistance
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Floating AI Assistant Card -->
+                    <div class="absolute -right-4 top-32 bg-white rounded-xl shadow-xl p-4 border border-gray-200 w-64">
+                        <h4 class="text-sm font-semibold text-gray-900 mb-3 flex items-center">
+                            <i class="fas fa-robot text-blue-500 mr-2"></i>
+                            AI Assistant
+                        </h4>
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-between p-2 bg-blue-50 rounded-lg">
+                                <div class="flex items-center">
+                                    <div class="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>
+                                    <span class="text-sm font-medium">Available 24/7</span>
+                                </div>
+                                <span class="text-xs text-blue-600 font-semibold">Online</span>
+                            </div>
+                            <div class="flex items-center justify-between p-2 bg-green-50 rounded-lg">
+                                <div class="flex items-center">
+                                    <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                                    <span class="text-sm font-medium">Smart Help</span>
+                                </div>
+                                <span class="text-xs text-green-600 font-semibold">Ready</span>
+                            </div>
+                        </div>
+                        <div class="mt-3 text-xs text-gray-500">
+                            Chat with AI for project guidance, Brain Building help, and platform navigation.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Partners/Stats Section -->
+<section class="py-16 bg-white border-t border-gray-200" style="opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out;">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Partner Logos -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 items-center justify-items-center mb-16 opacity-60">
+            <div class="text-2xl font-bold text-gray-400">InnovateCorp</div>
+            <div class="text-2xl font-bold text-gray-400">TechAdvance</div>
+            <div class="text-2xl font-bold text-gray-400">FutureMinds</div>
+            <div class="text-2xl font-bold text-gray-400">NextGenLabs</div>
+        </div>
+        
+        <!-- Statistics -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
+            <div>
+                <div class="text-3xl font-bold text-gray-900 mb-2">85%</div>
+                <div class="text-sm text-gray-600">increased<br>project success</div>
+            </div>
+            <div>
+                <div class="text-3xl font-bold text-gray-900 mb-2">15+</div>
+                <div class="text-sm text-gray-600">AI domains<br>supported</div>
+            </div>
+            <div>
+                <div class="text-3xl font-bold text-gray-900 mb-2">3x</div>
+                <div class="text-sm text-gray-600">increase in idea<br>generation</div>
+            </div>
+            <div>
+                <div class="text-3xl font-bold text-gray-900 mb-2">24/7</div>
+                <div class="text-sm text-gray-600">AI assistant<br>availability</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Overview -->
+<section class="py-20 bg-gray-50" style="opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out;">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl font-bold text-gray-900 mb-4">
+                Everything you need for AI+X innovation
+            </h2>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                From ideation to implementation, our platform provides all the tools 
+                and AI-powered guidance you need to build successful AI+X projects.
+            </p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <!-- Brain Building -->
+            <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-200">
+                <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-6">
+                    <i class="fas fa-lightbulb text-blue-600 text-xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Brain Building</h3>
+                <p class="text-gray-600 mb-6">
+                    Systematic 4-stage methodology to develop and refine innovative ideas 
+                    through structured thinking processes.
+                </p>
+                <a href="http://159.223.64.250:4500/brainbuildings" class="text-blue-600 font-semibold hover:text-blue-700">
+                    Learn more →
+                </a>
+            </div>
+            
+            <!-- Project Management -->
+            <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-200">
+                <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-6">
+                    <i class="fas fa-project-diagram text-green-600 text-xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Project Management</h3>
+                <p class="text-gray-600 mb-6">
+                    Comprehensive tools to plan, track, and execute AI+X projects 
+                    with team collaboration and progress monitoring.
+                </p>
+                <a href="http://159.223.64.250:4500/projects" class="text-green-600 font-semibold hover:text-green-700">
+                    Learn more →
+                </a>
+            </div>
+            
+            <!-- Reflection Journals -->
+            <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-200">
+                <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mb-6">
+                    <i class="fas fa-journal-whills text-purple-600 text-xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">Reflection Journals</h3>
+                <p class="text-gray-600 mb-6">
+                    Document your learning journey with structured reflection tools 
+                    and receive personalized feedback from instructors.
+                </p>
+                <a href="http://159.223.64.250:4500/reflections" class="text-purple-600 font-semibold hover:text-purple-700">
+                    Learn more →
+                </a>
+            </div>
+
+            <!-- AI Assistant -->
+            <div class="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-8 shadow-sm border border-blue-200">
+                <div class="w-12 h-12 bg-gradient-primary rounded-xl flex items-center justify-center mb-6">
+                    <i class="fas fa-robot text-white text-xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-4">AI Assistant</h3>
+                <p class="text-gray-600 mb-6">
+                    Get instant help with your projects, Brain Building activities, 
+                    and platform navigation from our intelligent AI assistant.
+                </p>
+                
+                <button onclick="openChatbot()" class="text-blue-600 font-semibold hover:text-blue-700 cursor-pointer bg-transparent border-none p-0">
+                    Start chatting →
+                </button>
+                
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Latest Community Projects -->
+
+<section class="py-20 bg-white" style="opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out;">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">
+                Featured community content
+            </h2>
+            <p class="text-lg text-gray-600">
+                Discover innovative Brain Buildings, Projects, and Reflection Journals from our community of creators
+            </p>
+        </div>
+        
+        <!-- Brain Buildings Section -->
+        
+        <div class="mb-16">
+            <div class="flex items-center justify-between mb-8">
+                <h3 class="text-2xl font-bold text-gray-900">
+                    <i class="fas fa-lightbulb text-blue-600 mr-2"></i>
+                    Latest Brain Buildings
+                </h3>
+                <a href="http://159.223.64.250:4500/brainbuildings" class="text-blue-600 hover:text-blue-700 font-semibold">
+                    View all Brain Buildings →
+                </a>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <article class="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full">
+                                Brain Building
+                            </span>
+                            <span class="text-sm text-gray-500">
+                                Jul 22
+                            </span>
+                        </div>
+                        
+                        <h3 class="text-lg font-semibold text-gray-900 mb-3">
+                            <a href="http://159.223.64.250:4500/student/brainbuilding/61" class="hover:text-blue-600 transition-colors">
+                                AI와 함께 발전하는 교육
+                            </a>
+                        </h3>
+                        
+                        <!-- Course Information -->
+                        
+                        <div class="inline-flex items-center px-2 py-1 bg-blue-50 text-blue-700 rounded text-xs font-medium mb-3">
+                            <i class="fas fa-graduation-cap w-3 h-3 mr-1"></i>
+                            윤리가 고려된 인공지능융합 수업 설계 by Sky Kang
+                        </div>
+                        
+                        
+                        <!-- Content Preview with HTML tags stripped -->
+                        <p class="text-gray-600 text-sm mb-4 line-clamp-3">
+                            학습자 맞춤형 교육디지털 도구를 활용한 학습탐구 기반 학습학생 참여 중심 교육자발적 참여를 유도하는 교육의사소통이 활발한 교육다양한 교과를 연계한 교육
+                        </p>
+                        
+                        <!-- Author Information -->
+                        <div class="flex items-center space-x-2">
+                            
+                            
+                            <div class="w-6 h-6 bg-gradient-primary rounded-full flex items-center justify-center">
+                                <span class="text-white text-xs font-bold">M</span>
+                            </div>
+                            <span class="text-sm text-gray-600">mina kim</span>
+                        </div>
+                    </div>
+                </article>
+                
+                <article class="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full">
+                                Brain Building
+                            </span>
+                            <span class="text-sm text-gray-500">
+                                Jul 22
+                            </span>
+                        </div>
+                        
+                        <h3 class="text-lg font-semibold text-gray-900 mb-3">
+                            <a href="http://159.223.64.250:4500/student/brainbuilding/60" class="hover:text-blue-600 transition-colors">
+                                결과가 아닌 출발이 되는 수업 설계
+                            </a>
+                        </h3>
+                        
+                        <!-- Course Information -->
+                        
+                        <div class="inline-flex items-center px-2 py-1 bg-gray-50 text-gray-600 rounded text-xs font-medium mb-3">
+                            <i class="fas fa-user w-3 h-3 mr-1"></i>
+                            Independent Work
+                        </div>
+                        
+                        
+                        <!-- Content Preview with HTML tags stripped -->
+                        <p class="text-gray-600 text-sm mb-4 line-clamp-3">
+                            학습자 중심 교육개별화 학습자기주도적 학습탐구기반 학습학습자의 내적 동기 유발유연한 수업 설계열린 질문 기반 수업확장 가능한 수업 설계상호 작용적 수업과정 중심 평가배움의 지속성
+                        </p>
+                        
+                        <!-- Author Information -->
+                        <div class="flex items-center space-x-2">
+                            
+                            
+                            <div class="w-6 h-6 bg-gradient-primary rounded-full flex items-center justify-center">
+                                <span class="text-white text-xs font-bold">조</span>
+                            </div>
+                            <span class="text-sm text-gray-600">조은재</span>
+                        </div>
+                    </div>
+                </article>
+                
+                <article class="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full">
+                                Brain Building
+                            </span>
+                            <span class="text-sm text-gray-500">
+                                Jul 22
+                            </span>
+                        </div>
+                        
+                        <h3 class="text-lg font-semibold text-gray-900 mb-3">
+                            <a href="http://159.223.64.250:4500/student/brainbuilding/59" class="hover:text-blue-600 transition-colors">
+                                사례를 중심으로 한 자신의 삶과 연계한 수업 설계
+                            </a>
+                        </h3>
+                        
+                        <!-- Course Information -->
+                        
+                        <div class="inline-flex items-center px-2 py-1 bg-blue-50 text-blue-700 rounded text-xs font-medium mb-3">
+                            <i class="fas fa-graduation-cap w-3 h-3 mr-1"></i>
+                            윤리가 고려된 인공지능융합 수업 설계 by Sky Kang
+                        </div>
+                        
+                        
+                        <!-- Content Preview with HTML tags stripped -->
+                        <p class="text-gray-600 text-sm mb-4 line-clamp-3">
+                            자기주도학습협동학습과정중심평가문제 중심 학습교과 간 융합 수업진로 연계 수업
+                        </p>
+                        
+                        <!-- Author Information -->
+                        <div class="flex items-center space-x-2">
+                            
+                            
+                            <div class="w-6 h-6 bg-gradient-primary rounded-full flex items-center justify-center">
+                                <span class="text-white text-xs font-bold">K</span>
+                            </div>
+                            <span class="text-sm text-gray-600">Kim Si Ho</span>
+                        </div>
+                    </div>
+                </article>
+                
+            </div>
+        </div>
+        
+        
+        <!-- Projects Section -->
+        
+        <div class="mb-16">
+            <div class="flex items-center justify-between mb-8">
+                <h3 class="text-2xl font-bold text-gray-900">
+                    <i class="fas fa-project-diagram text-green-600 mr-2"></i>
+                    Latest Projects
+                </h3>
+                <a href="http://159.223.64.250:4500/projects" class="text-green-600 hover:text-green-700 font-semibold">
+                    View all Projects →
+                </a>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <article class="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="px-3 py-1 bg-green-100 text-green-800 text-sm font-medium rounded-full">
+                                Project
+                            </span>
+                            <span class="text-sm text-gray-500">
+                                Jul 29
+                            </span>
+                        </div>
+                        
+                        <h3 class="text-lg font-semibold text-gray-900 mb-3">
+                            <a href="http://159.223.64.250:4500/student/project/75" class="hover:text-green-600 transition-colors">
+                                컴퓨터 비전 기반 한자쓰기 학습 및 평가 딥러닝
+                            </a>
+                        </h3>
+                        
+                        <!-- Project Stage -->
+                        
+                        <div class="inline-flex items-center px-2 py-1 bg-green-50 text-green-700 rounded text-xs font-medium mb-3">
+                            <i class="fas fa-tasks w-3 h-3 mr-1"></i>
+                            Design Stage
+                        </div>
+                        
+                        
+                        <!-- Content Preview with HTML tags stripped -->
+                        <p class="text-gray-600 text-sm mb-4 line-clamp-3">
+                            한자는 복잡한 구조로 인해 학습과 평가에 어려움이 있다.&nbsp;제안된 시스템은 학습자의 필기 데이터를 인식하고 분석하여 한자의 정확도를 평가하고, 학습 과정에서의 개선 방향을 제공한다. 이를 통해 학습자는&nbsp;&nbsp;학습자는 자신
+                            ...
+                        </p>
+                        
+                        <!-- Author Information -->
+                        <div class="flex items-center space-x-2">
+                            
+                            <div class="w-6 h-6 bg-gradient-accent rounded-full flex items-center justify-center">
+                                <span class="text-white text-xs font-bold">이</span>
+                            </div>
+                            <span class="text-sm text-gray-600">이시온</span>
+                        </div>
+                    </div>
+                </article>
+                
+                <article class="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="px-3 py-1 bg-green-100 text-green-800 text-sm font-medium rounded-full">
+                                Project
+                            </span>
+                            <span class="text-sm text-gray-500">
+                                Jul 27
+                            </span>
+                        </div>
+                        
+                        <h3 class="text-lg font-semibold text-gray-900 mb-3">
+                            <a href="http://159.223.64.250:4500/student/project/74" class="hover:text-green-600 transition-colors">
+                                AI를 활용한 일본어 문자 학습법 개발
+                            </a>
+                        </h3>
+                        
+                        <!-- Project Stage -->
+                        
+                        <div class="inline-flex items-center px-2 py-1 bg-green-50 text-green-700 rounded text-xs font-medium mb-3">
+                            <i class="fas fa-tasks w-3 h-3 mr-1"></i>
+                            Design Stage
+                        </div>
+                        
+                        
+                        <!-- Content Preview with HTML tags stripped -->
+                        <p class="text-gray-600 text-sm mb-4 line-clamp-3">
+                            - 문자학습의 중요성 : 일본어 학습에서 ひらがな, 카타카나는 듣기, 말하기, 읽기, 쓰기 능력을 구현하는 기초가 되는 기본 능력으로, 학생들의 언어 실력 전반 향상에 필수적임.- AI와의 융합 : 학생이 발음하거나
+                            ...
+                        </p>
+                        
+                        <!-- Author Information -->
+                        <div class="flex items-center space-x-2">
+                            
+                            <div class="w-6 h-6 bg-gradient-accent rounded-full flex items-center justify-center">
+                                <span class="text-white text-xs font-bold">구</span>
+                            </div>
+                            <span class="text-sm text-gray-600">구복순</span>
+                        </div>
+                    </div>
+                </article>
+                
+                <article class="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="px-3 py-1 bg-green-100 text-green-800 text-sm font-medium rounded-full">
+                                Project
+                            </span>
+                            <span class="text-sm text-gray-500">
+                                Jul 25
+                            </span>
+                        </div>
+                        
+                        <h3 class="text-lg font-semibold text-gray-900 mb-3">
+                            <a href="http://159.223.64.250:4500/student/project/73" class="hover:text-green-600 transition-colors">
+                                빛의 3원색을 이용한 빛의 색 찾기
+                            </a>
+                        </h3>
+                        
+                        <!-- Project Stage -->
+                        
+                        <div class="inline-flex items-center px-2 py-1 bg-green-50 text-green-700 rounded text-xs font-medium mb-3">
+                            <i class="fas fa-tasks w-3 h-3 mr-1"></i>
+                            Planning Stage
+                        </div>
+                        
+                        
+                        <!-- Content Preview with HTML tags stripped -->
+                        <p class="text-gray-600 text-sm mb-4 line-clamp-3">
+                            우리가 보고 있는 물체의 색은 물체에 빛이 닿게 되면 물체가 들어오는 빛 중에서 일부 색을 흡수하고 나머지는 반사하게 되는데 그렇게 반사된 빛이 눈에 들어오면서 반사된 색의 빛들이 합성하면서 우리가 알고 있는 물체의
+                            ...
+                        </p>
+                        
+                        <!-- Author Information -->
+                        <div class="flex items-center space-x-2">
+                            
+                            <div class="w-6 h-6 bg-gradient-accent rounded-full flex items-center justify-center">
+                                <span class="text-white text-xs font-bold">황</span>
+                            </div>
+                            <span class="text-sm text-gray-600">황승환</span>
+                        </div>
+                    </div>
+                </article>
+                
+            </div>
+        </div>
+        
+        
+        <!-- Reflection Journals Section -->
+        
+        <div class="mb-16">
+            <div class="flex items-center justify-between mb-8">
+                <h3 class="text-2xl font-bold text-gray-900">
+                    <i class="fas fa-journal-whills text-purple-600 mr-2"></i>
+                    Latest Reflection Journals
+                </h3>
+                <a href="http://159.223.64.250:4500/reflections" class="text-purple-600 hover:text-purple-700 font-semibold">
+                    View all Reflection Journals →
+                </a>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <article class="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="px-3 py-1 bg-purple-100 text-purple-800 text-sm font-medium rounded-full">
+                                Reflection Journal
+                            </span>
+                            <span class="text-sm text-gray-500">
+                                Jul 29
+                            </span>
+                        </div>
+                        
+                        <h3 class="text-lg font-semibold text-gray-900 mb-3">
+                            <a href="http://159.223.64.250:4500/student/reflection/12" class="hover:text-purple-600 transition-colors">
+                                윤리가 고려된 융합 수업, 바이브 코딩을 활용한 웹 앱 제작을 통해 느낀점
+                            </a>
+                        </h3>
+                        
+                        <!-- Course Information -->
+                        
+                        <div class="inline-flex items-center px-2 py-1 bg-purple-50 text-purple-700 rounded text-xs font-medium mb-3">
+                            <i class="fas fa-graduation-cap w-3 h-3 mr-1"></i>
+                            윤리가 고려된 인공지능융합 수업 설계 by Sky Kang
+                        </div>
+                        
+                        
+                        <!-- Content Preview with HTML tags stripped -->
+                        <p class="text-gray-600 text-sm mb-4 line-clamp-3">
+                            이번 수업을 통해 딥페이크 기술이 단순히 인공지능 기술에 그치지 않고, 사회적으로 얼마나 큰 영향을 미칠 수 있는지 깊이 체감할 수 있었습니다. 융합 수업 설계 과정에서&nbsp; Swap Face 웹사이트를 활용하여 자신의
+                            ...
+                        </p>
+                        
+                        <!-- Author Information -->
+                        <div class="flex items-center space-x-2">
+                            
+                            <div class="w-6 h-6 bg-gradient-reflection rounded-full flex items-center justify-center">
+                                <span class="text-white text-xs font-bold">M</span>
+                            </div>
+                            <span class="text-sm text-gray-600">mina kim</span>
+                        </div>
+                    </div>
+                </article>
+                
+                <article class="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="px-3 py-1 bg-purple-100 text-purple-800 text-sm font-medium rounded-full">
+                                Reflection Journal
+                            </span>
+                            <span class="text-sm text-gray-500">
+                                Jul 29
+                            </span>
+                        </div>
+                        
+                        <h3 class="text-lg font-semibold text-gray-900 mb-3">
+                            <a href="http://159.223.64.250:4500/student/reflection/11" class="hover:text-purple-600 transition-colors">
+                                바이브 코딩을 활용하여 AI 프로그램을 설계하면서 느낀점
+                            </a>
+                        </h3>
+                        
+                        <!-- Course Information -->
+                        
+                        <div class="inline-flex items-center px-2 py-1 bg-purple-50 text-purple-700 rounded text-xs font-medium mb-3">
+                            <i class="fas fa-graduation-cap w-3 h-3 mr-1"></i>
+                            윤리가 고려된 인공지능융합 수업 설계 by Sky Kang
+                        </div>
+                        
+                        
+                        <!-- Content Preview with HTML tags stripped -->
+                        <p class="text-gray-600 text-sm mb-4 line-clamp-3">
+                            &nbsp;평소 간단한 바이브 코딩 정도는 해봤지만, 직접 AI 프로그램을 만들어보는 것은 이번이 처음이었다. 처음에는 단순한 입력만으로도 간단히 작동할 거라 생각했지만, 점점 기능을 추가하고 결과의 퀄리티를 높이려 하다 보
+                            ...
+                        </p>
+                        
+                        <!-- Author Information -->
+                        <div class="flex items-center space-x-2">
+                            
+                            <div class="w-6 h-6 bg-gradient-reflection rounded-full flex items-center justify-center">
+                                <span class="text-white text-xs font-bold">하</span>
+                            </div>
+                            <span class="text-sm text-gray-600">하수빈</span>
+                        </div>
+                    </div>
+                </article>
+                
+                <article class="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="px-3 py-1 bg-purple-100 text-purple-800 text-sm font-medium rounded-full">
+                                Reflection Journal
+                            </span>
+                            <span class="text-sm text-gray-500">
+                                Jul 29
+                            </span>
+                        </div>
+                        
+                        <h3 class="text-lg font-semibold text-gray-900 mb-3">
+                            <a href="http://159.223.64.250:4500/student/reflection/10" class="hover:text-purple-600 transition-colors">
+                                윤리가 고려된 인공지능 융합 수업 설계의 수업 계획 안을 만들면서
+                            </a>
+                        </h3>
+                        
+                        <!-- Course Information -->
+                        
+                        <div class="inline-flex items-center px-2 py-1 bg-purple-50 text-purple-700 rounded text-xs font-medium mb-3">
+                            <i class="fas fa-graduation-cap w-3 h-3 mr-1"></i>
+                            윤리가 고려된 인공지능융합 수업 설계 by Sky Kang
+                        </div>
+                        
+                        
+                        <!-- Content Preview with HTML tags stripped -->
+                        <p class="text-gray-600 text-sm mb-4 line-clamp-3">
+                            나는 무엇을 배웠는가? 교수자는 반드시 수업 설계안을 제대로 작성해야한다. 나는 특강수업 강사여서 매번 흥미를 끌만한 소재를 적당한 교과과정에 끼어맞춰서 수업설계를 했다. 내 머릿속에 있는 수업 설계를 바로 파워포인
+                            ...
+                        </p>
+                        
+                        <!-- Author Information -->
+                        <div class="flex items-center space-x-2">
+                            
+                            <div class="w-6 h-6 bg-gradient-reflection rounded-full flex items-center justify-center">
+                                <span class="text-white text-xs font-bold">H</span>
+                            </div>
+                            <span class="text-sm text-gray-600">Haejin Jeong</span>
+                        </div>
+                    </div>
+                </article>
+                
+            </div>
+        </div>
+        
+        
+        <!-- Combined Action Buttons -->
+        <div class="text-center">
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                
+                <a href="http://159.223.64.250:4500/brainbuildings" class="inline-flex items-center px-8 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-colors">
+                    <i class="fas fa-lightbulb mr-2"></i>
+                    Explore Brain Buildings
+                </a>
+                
+                
+                <a href="http://159.223.64.250:4500/projects" class="inline-flex items-center px-8 py-3 bg-green-600 text-white font-semibold rounded-xl hover:bg-green-700 transition-colors">
+                    <i class="fas fa-project-diagram mr-2"></i>
+                    Explore Projects
+                </a>
+                
+                
+                <a href="http://159.223.64.250:4500/reflections" class="inline-flex items-center px-8 py-3 bg-purple-600 text-white font-semibold rounded-xl hover:bg-purple-700 transition-colors">
+                    <i class="fas fa-journal-whills mr-2"></i>
+                    Explore Reflection Journals
+                </a>
+                
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- CTA Section -->
+
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
+                            <i class="fas fa-brain text-white text-sm"></i>
+                        </div>
+                        <span class="text-xl font-bold">AI+X Platform</span>
+                    </div>
+                    <p class="text-gray-400 mb-4 max-w-md">
+                        A platform for planning and sharing innovative projects that fuse artificial intelligence with various fields.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="http://159.223.64.250:4500/#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="http://159.223.64.250:4500/#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="http://159.223.64.250:4500/#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="font-semibold mb-4">Features</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="http://159.223.64.250:4500/brainbuildings" class="hover:text-white transition-colors">Brain Building</a></li>
+                        <li><a href="http://159.223.64.250:4500/projects" class="hover:text-white transition-colors">Projects</a></li>
+                        <li><a href="http://159.223.64.250:4500/reflections" class="hover:text-white transition-colors">Reflection Journal</a></li>
+                        <li><a href="http://159.223.64.250:4500/solutions" class="hover:text-white transition-colors">Solutions</a></li>
+                        <li><a href="http://159.223.64.250:4500/resources" class="hover:text-white transition-colors">Resources</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="font-semibold mb-4">Support</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="http://159.223.64.250:4500/#" class="hover:text-white transition-colors">Help Center</a></li>
+                        <li><a href="http://159.223.64.250:4500/#" class="hover:text-white transition-colors">Contact Us</a></li>
+                        <li><a href="http://159.223.64.250:4500/#" class="hover:text-white transition-colors">API Documentation</a></li>
+                        <li><a href="http://159.223.64.250:4500/#" class="hover:text-white transition-colors">Status Page</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 text-sm">© 2025 AI+X Platform. All rights reserved.</p>
+                <div class="flex space-x-6 mt-4 md:mt-0">
+                    <a href="http://159.223.64.250:4500/#" class="text-gray-400 hover:text-white text-sm transition-colors">Privacy Policy</a>
+                    <a href="http://159.223.64.250:4500/#" class="text-gray-400 hover:text-white text-sm transition-colors">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        if (mobileMenuButton && mobileMenu) {
+            mobileMenuButton.addEventListener('click', function() {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+
+        // Auto-hide flash messages
+        setTimeout(function() {
+            const messages = document.querySelectorAll('.animate-slide-up');
+            messages.forEach(msg => {
+                msg.style.opacity = '0';
+                msg.style.transform = 'translateX(100%)';
+                setTimeout(() => msg.remove(), 300);
+            });
+        }, 5000);
+
+        // ⭐ 개선된 메뉴 호버 관리 ⭐
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropdowns = document.querySelectorAll('.nav-dropdown');
+            
+            dropdowns.forEach(dropdown => {
+                const menu = dropdown.querySelector('.dropdown-menu');
+                let hoverTimeout;
+                
+                // 마우스 진입
+                dropdown.addEventListener('mouseenter', function() {
+                    clearTimeout(hoverTimeout);
+                    if (menu) {
+                        menu.style.opacity = '1';
+                        menu.style.visibility = 'visible';
+                        menu.style.transform = 'translateY(0)';
+                        menu.style.pointerEvents = 'auto';
+                    }
+                });
+                
+                // 마우스 이탈
+                dropdown.addEventListener('mouseleave', function() {
+                    hoverTimeout = setTimeout(() => {
+                        if (menu) {
+                            menu.style.opacity = '0';
+                            menu.style.visibility = 'hidden';
+                            menu.style.transform = 'translateY(-10px)';
+                            menu.style.pointerEvents = 'none';
+                        }
+                    }, 100); // 100ms 지연으로 사용자 경험 향상
+                });
+                
+                // 메뉴 내부에서 마우스 이동 시 타이머 취소
+                if (menu) {
+                    menu.addEventListener('mouseenter', function() {
+                        clearTimeout(hoverTimeout);
+                    });
+                }
+            });
+        });
+
+        // ✅ 전역 챗봇 함수들
+        function openChatbot() {
+            console.log('🖱️ Global openChatbot() called');
+            
+            const isLoggedIn = true;
+            
+            if (!isLoggedIn) {
+                console.log('⚠️ User not logged in, redirecting...');
+                redirectToLogin();
+                return;
+            }
+            
+            const chatbotButton = document.getElementById('chatbot-button');
+            const chatbotContainer = document.getElementById('chatbot-container');
+            
+            if (!chatbotButton || !chatbotContainer) {
+                console.log('❌ Chatbot elements not found, waiting...');
+                
+                setTimeout(() => {
+                    const retryButton = document.getElementById('chatbot-button');
+                    const retryContainer = document.getElementById('chatbot-container');
+                    
+                    if (retryButton && retryContainer) {
+                        console.log('✅ Chatbot elements found on retry');
+                        retryContainer.classList.add('active');
+                        retryButton.style.display = 'none';
+                        retryButton.style.visibility = 'hidden';
+                        retryButton.style.opacity = '0';
+                        
+                        const inputField = document.getElementById('chatbot-input-field');
+                        if (inputField) {
+                            setTimeout(() => inputField.focus(), 300);
+                        }
+                    } else {
+                        console.log('❌ Chatbot still not found after retry');
+                        alert('Chatbot is loading... Please try again in a moment.');
+                    }
+                }, 1000);
+                
+                return;
+            }
+            
+            console.log('✅ Opening chatbot globally');
+            chatbotContainer.classList.add('active');
+            chatbotButton.style.display = 'none';
+            chatbotButton.style.visibility = 'hidden';
+            chatbotButton.style.opacity = '0';
+            chatbotButton.style.pointerEvents = 'none';
+            chatbotButton.classList.remove('show');
+            
+            const inputField = document.getElementById('chatbot-input-field');
+            if (inputField) {
+                const isMobile = window.innerWidth <= 640;
+                setTimeout(() => inputField.focus(), isMobile ? 500 : 300);
+            }
+        }
+
+        function redirectToLogin() {
+            console.log('🔗 Global redirectToLogin() called');
+            const confirmed = confirm('You need to sign in to use the AI Assistant. Would you like to go to the login page?');
+            
+            if (confirmed) {
+                const currentUrl = encodeURIComponent(window.location.pathname + window.location.search);
+                window.location.href = `/auth/login?next=${currentUrl}`;
+            }
+        }
+
+        // 전역 함수 등록
+        window.openChatbot = openChatbot;
+        window.redirectToLogin = redirectToLogin;
+        
+        console.log('🎯 Global chatbot functions registered');
+    </script>
+
+    <!-- 완전히 수정된 모바일 최적화 챗봇 JavaScript -->
+    <script>
+// AI+X Platform 챗봇 구현 - 수정된 버전
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🤖 AIXSS Chatbot initializing...');
+    
+    // 로그인 상태 확인
+    const isLoggedIn = true;
+    console.log(`🔐 Login status: ${isLoggedIn}`);
+    
+    // 모바일 환경 감지
+    const isMobile = window.innerWidth <= 640;
+    console.log(`📱 Mobile detected: ${isMobile}`);
+    
+    // 챗봇 HTML 생성
+    const chatbotHTML = `
+        <div class="chatbot-button ${isLoggedIn ? 'show' : ''}" id="chatbot-button">
+            <i class="fas fa-comment-dots fa-lg"></i>
+        </div>
+        
+        <div class="chatbot-container" id="chatbot-container">
+            <div class="chatbot-header">
+                <h3>AI+X Assistant</h3>
+                <button class="chatbot-close" id="chatbot-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="chatbot-body" id="chatbot-body">
+                <div class="chat-bubble bot-message">
+                    <div class="bot-message-header">
+                        <button class="copy-button" title="Copy message">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                    <div class="response-content">
+                        ${isLoggedIn 
+                            ? 'Hello! I\'m your AI+X Assistant. I can help you with Brain Building, Project Management, Reflection Journals, and platform navigation. How can I assist you today?' 
+                            : 'Sorry, you need to be logged in to use the AI assistant. Please sign in to access all features.'}
+                    </div>
+                    <div class="message-time">Just now</div>
+                </div>
+            </div>
+            
+            <div class="chatbot-input">
+                <input type="text" id="chatbot-input-field" placeholder="Ask me anything..." ${!isLoggedIn ? 'disabled' : ''}>
+                <button id="chatbot-send" ${!isLoggedIn ? 'disabled' : ''}>
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    `;
+    
+    // HTML에 챗봇 요소 추가
+    document.body.insertAdjacentHTML('beforeend', chatbotHTML);
+    console.log('✅ Chatbot HTML added to page');
+    
+    // 요소 선택
+    const chatbotButton = document.getElementById('chatbot-button');
+    const chatbotContainer = document.getElementById('chatbot-container');
+    const chatbotClose = document.getElementById('chatbot-close');
+    const chatbotBody = document.getElementById('chatbot-body');
+    const chatbotInputField = document.getElementById('chatbot-input-field');
+    const chatbotSend = document.getElementById('chatbot-send');
+    
+    // 초기 복사 버튼 이벤트 리스너
+    const initialCopyButton = chatbotBody.querySelector('.copy-button');
+    if (initialCopyButton) {
+        initialCopyButton.addEventListener('click', function() {
+            const messageContent = this.closest('.bot-message').querySelector('.response-content').innerText;
+            copyToClipboard(messageContent);
+            
+            const icon = this.querySelector('i');
+            icon.className = 'fas fa-check';
+            setTimeout(() => {
+                icon.className = 'fas fa-copy';
+            }, 1500);
+        });
+    }
+    
+    // 버튼 숨기기/표시 함수
+    function hideChatbotButton() {
+        if (chatbotButton) {
+            chatbotButton.style.display = 'none';
+            chatbotButton.style.visibility = 'hidden';
+            chatbotButton.style.opacity = '0';
+            chatbotButton.style.pointerEvents = 'none';
+            chatbotButton.classList.remove('show');
+        }
+    }
+    
+    function showChatbotButton() {
+        if (chatbotButton && isLoggedIn) {
+            chatbotButton.style.display = 'flex';
+            chatbotButton.style.visibility = 'visible';
+            chatbotButton.style.opacity = '1';
+            chatbotButton.style.pointerEvents = 'auto';
+            chatbotButton.classList.add('show');
+        }
+    }
+    
+    // 챗봇 열기/닫기 이벤트
+    if (chatbotButton) {
+        chatbotButton.addEventListener('click', function() {
+            console.log('🖱️ Chatbot button clicked');
+            
+            if (!isLoggedIn) {
+                alert('Please sign in to use the AI assistant.');
+                window.location.href = '/auth/login';
+                return;
+            }
+            
+            console.log('📱 Opening chatbot container');
+            chatbotContainer.classList.add('active');
+            hideChatbotButton();
+            
+            if (chatbotInputField) {
+                setTimeout(() => {
+                    chatbotInputField.focus();
+                }, isMobile ? 500 : 300);
+            }
+        });
+    }
+    
+    if (chatbotClose) {
+        chatbotClose.addEventListener('click', function() {
+            console.log('❌ Closing chatbot');
+            chatbotContainer.classList.remove('active');
+            
+            setTimeout(() => {
+                showChatbotButton();
+            }, 300);
+        });
+    }
+    
+    // 창 밖 클릭 시 챗봇 닫기 (드롭다운 메뉴 제외)
+    document.addEventListener('click', function(event) {
+        if (!chatbotContainer || !chatbotButton) return;
+        
+        // 드롭다운 메뉴 클릭 시 챗봇 닫지 않기
+        if (event.target.closest('.dropdown-menu') || 
+            event.target.closest('.nav-dropdown')) {
+            return;
+        }
+        
+        if (chatbotContainer.classList.contains('active')) {
+            const isClickInsideChatbot = chatbotContainer.contains(event.target);
+            const isClickOnButton = chatbotButton.contains(event.target);
+            
+            if (!isClickInsideChatbot && !isClickOnButton) {
+                chatbotContainer.classList.remove('active');
+                setTimeout(() => {
+                    showChatbotButton();
+                }, 300);
+            }
+        }
+    });
+    
+    // ESC 키로 챗봇 닫기
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            if (chatbotContainer && chatbotContainer.classList.contains('active')) {
+                chatbotContainer.classList.remove('active');
+                setTimeout(() => {
+                    showChatbotButton();
+                }, 300);
+            }
+        }
+    });
+    
+    // 로그인하지 않았으면 여기서 종료
+    if (!isLoggedIn) {
+        console.log('⏹️ Stopping initialization - not logged in');
+        return;
+    }
+    
+    console.log('▶️ Continuing with full chatbot initialization...');
+    
+    // 메시지 전송 함수
+    function sendMessage() {
+        const message = chatbotInputField.value.trim();
+        if (!message) return;
+        
+        // 명령어 처리
+        if (message === '!clear') {
+            chatbotInputField.value = '';
+            clearChatHistory();
+            return;
+        }
+        
+        // 현재 시간
+        const now = new Date();
+        const hours = now.getHours().toString().padStart(2, '0');
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+        const timeString = `${hours}:${minutes}`;
+        
+        // 사용자 메시지 추가
+        const userMessageHTML = `
+        <div class="chat-bubble user-message">
+            ${escapeHTML(message)}
+            <div class="message-time">${timeString}</div>
+        </div>
+        `;
+        chatbotBody.insertAdjacentHTML('beforeend', userMessageHTML);
+        
+        // 입력 필드 초기화
+        chatbotInputField.value = '';
+        
+        // 채팅창 스크롤
+        scrollToBottom();
+        
+        // 타이핑 표시기 추가
+        const typingIndicator = document.createElement('div');
+        typingIndicator.className = 'typing-indicator';
+        typingIndicator.innerHTML = '<span></span><span></span><span></span>';
+        typingIndicator.id = 'typing-indicator';
+        chatbotBody.appendChild(typingIndicator);
+        scrollToBottom();
+        
+        // API 호출
+        fetchAIResponse(message);
+    }
+
+    // 대화 기록 초기화 함수
+    async function clearChatHistory() {
+        try {
+            const response = await fetch('/api/chatbot/clear', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'same-origin',
+                body: JSON.stringify({})
+            });
+            
+            if (response.ok) {
+                // 채팅창 초기화
+                const welcomeMessage = chatbotBody.firstElementChild;
+                chatbotBody.innerHTML = '';
+                chatbotBody.appendChild(welcomeMessage);
+                
+                // 초기화 성공 메시지
+                const clearMessageHTML = `
+                <div class="chat-bubble bot-message">
+                    <div class="bot-message-header">
+                        <button class="copy-button" title="Copy message">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                    <div class="response-content">Chat history has been cleared. Feel free to start a new conversation!</div>
+                    <div class="message-time">Just now</div>
+                </div>
+                `;
+                chatbotBody.insertAdjacentHTML('beforeend', clearMessageHTML);
+                
+                // 복사 버튼 이벤트 리스너 추가
+                const copyButton = chatbotBody.lastElementChild.querySelector('.copy-button');
+                copyButton.addEventListener('click', function() {
+                    const messageContent = this.closest('.bot-message').querySelector('.response-content').innerText;
+                    copyToClipboard(messageContent);
+                    
+                    const icon = this.querySelector('i');
+                    icon.className = 'fas fa-check';
+                    setTimeout(() => {
+                        icon.className = 'fas fa-copy';
+                    }, 1500);
+                });
+                
+                scrollToBottom();
+            } else {
+                throw new Error('Failed to clear chat history');
+            }
+        } catch (error) {
+            console.error('Error clearing chat history:', error);
+            showErrorMessage('Sorry, there was an error clearing the chat history. Please try again later.');
+        }
+    }
+    
+    // AI 응답 API 호출
+    async function fetchAIResponse(message) {
+        try {
+            console.log("API request started:", message);
+            
+            const response = await fetch('/api/chatbot', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'same-origin',
+                body: JSON.stringify({ message: message })
+            });
+            
+            console.log("Response status:", response.status);
+            
+            // 인증 오류 처리
+            if (response.status === 401) {
+                const typingIndicator = document.getElementById('typing-indicator');
+                if (typingIndicator) typingIndicator.remove();
+                
+                showErrorMessage('Your session has expired. Please <a href="/auth/login" class="text-blue-600 hover:underline">sign in</a> again.');
+                return;
+            }
+            
+            // API 응답 처리
+            if (response.ok) {
+                const data = await response.json();
+                console.log("Response data received");
+                
+                // 타이핑 표시기 제거
+                const typingIndicator = document.getElementById('typing-indicator');
+                if (typingIndicator) typingIndicator.remove();
+                
+                // 현재 시간
+                const now = new Date();
+                const hours = now.getHours().toString().padStart(2, '0');
+                const minutes = now.getMinutes().toString().padStart(2, '0');
+                const timeString = `${hours}:${minutes}`;
+                
+                // 봇 응답 메시지 요소 생성
+                const botMessage = document.createElement('div');
+                botMessage.className = 'chat-bubble bot-message';
+                botMessage.innerHTML = `
+                    <div class="bot-message-header">
+                        <button class="copy-button" title="Copy message">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                    <div class="response-content"></div>
+                    <div class="message-time">${timeString}</div>
+                `;
+                chatbotBody.appendChild(botMessage);
+                
+                // 복사 버튼에 이벤트 리스너 추가
+                const copyButton = botMessage.querySelector('.copy-button');
+                copyButton.addEventListener('click', function() {
+                    const messageContent = this.closest('.bot-message').querySelector('.response-content').innerText;
+                    copyToClipboard(messageContent);
+                    
+                    const icon = this.querySelector('i');
+                    icon.className = 'fas fa-check';
+                    setTimeout(() => {
+                        icon.className = 'fas fa-copy';
+                    }, 1500);
+                });
+                
+                // 응답 텍스트에 타이핑 효과 적용
+                const responseContent = botMessage.querySelector('.response-content');
+                const formattedText = formatBotResponse(data.response || "I couldn't generate a response. Please try again.");
+                
+                typeTextWithScroll(responseContent, formattedText);
+                
+            } else {
+                const errorText = await response.text();
+                console.error("API error response:", errorText);
+                throw new Error('API response error: ' + response.status);
+            }
+        } catch (error) {
+            console.error('Error fetching AI response:', error);
+            
+            const typingIndicator = document.getElementById('typing-indicator');
+            if (typingIndicator) typingIndicator.remove();
+            
+            showErrorMessage('Sorry, I encountered an error while processing your request. Please try again later.');
+        }
+    }
+    
+    // 에러 메시지 표시 함수
+    function showErrorMessage(message) {
+        const now = new Date();
+        const hours = now.getHours().toString().padStart(2, '0');
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+        const timeString = `${hours}:${minutes}`;
+        
+        const errorMessageHTML = `
+        <div class="chat-bubble bot-message">
+            <div class="bot-message-header">
+                <button class="copy-button" title="Copy message">
+                    <i class="fas fa-copy"></i>
+                </button>
+            </div>
+            <div class="response-content">${message}</div>
+            <div class="message-time">${timeString}</div>
+        </div>
+        `;
+        chatbotBody.insertAdjacentHTML('beforeend', errorMessageHTML);
+        
+        const copyButton = chatbotBody.lastElementChild.querySelector('.copy-button');
+        copyButton.addEventListener('click', function() {
+            const messageContent = this.closest('.bot-message').querySelector('.response-content').innerText;
+            copyToClipboard(messageContent);
+            
+            const icon = this.querySelector('i');
+            icon.className = 'fas fa-check';
+            setTimeout(() => {
+                icon.className = 'fas fa-copy';
+            }, 1500);
+        });
+        
+        scrollToBottom();
+    }
+    
+    // 개선된 타이핑 효과 (스크롤 포함)
+    function typeTextWithScroll(responseContent, text, typingSpeed = 10) {
+        const textChunks = splitTextIntoChunks(text, 3);
+        let i = 0;
+        
+        function typeText() {
+            if (i < textChunks.length) {
+                responseContent.innerHTML += textChunks[i];
+                i++;
+                
+                // 매 청크마다 스크롤 조정
+                scrollToBottom();
+                
+                setTimeout(typeText, typingSpeed);
+            }
+        }
+        
+        typeText();
+    }
+    
+    // 텍스트를 작은 청크로 나누는 함수 (HTML 태그 보존)
+    function splitTextIntoChunks(text, chunkSize) {
+        const chunks = [];
+        let inTag = false;
+        let currentChunk = '';
+        let normalTextCount = 0;
+        
+        for (let i = 0; i < text.length; i++) {
+            const char = text[i];
+            
+            if (char === '<') {
+                inTag = true;
+                if (normalTextCount > 0) {
+                    chunks.push(currentChunk);
+                    currentChunk = '';
+                    normalTextCount = 0;
+                }
+            }
+            
+            currentChunk += char;
+            
+            if (char === '>' && inTag) {
+                inTag = false;
+                chunks.push(currentChunk);
+                currentChunk = '';
+                continue;
+            }
+            
+            if (!inTag) {
+                normalTextCount++;
+                
+                if (normalTextCount >= chunkSize) {
+                    chunks.push(currentChunk);
+                    currentChunk = '';
+                    normalTextCount = 0;
+                }
+            }
+        }
+        
+        if (currentChunk) {
+            chunks.push(currentChunk);
+        }
+        
+        return chunks;
+    }
+    
+    // 봇 응답 형식 지정 (마크다운 → HTML)
+    function formatBotResponse(text) {
+        if (!text) return "I couldn't generate a response. Please try again.";
+        
+        // 간단한 마크다운 변환
+        text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        text = text.replace(/\*(.*?)\*/g, '<em>$1</em>');
+        text = text.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" class="text-blue-600 hover:underline">$1</a>');
+        text = text.replace(/\n/g, '<br>');
+        
+        return text;
+    }
+    
+    // HTML 이스케이프 (XSS 방지)
+    function escapeHTML(text) {
+        return text
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+    
+    // 클립보드에 텍스트 복사하는 함수
+    function copyToClipboard(text) {
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(text)
+                .catch(err => {
+                    console.error('Clipboard copy failed:', err);
+                });
+        } else {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-999999px';
+            textArea.style.top = '-999999px';
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                document.execCommand('copy');
+            } catch (err) {
+                console.error('Clipboard copy failed:', err);
+            }
+            
+            document.body.removeChild(textArea);
+        }
+    }
+    
+    // 메시지 전송 후 스크롤 조정
+    function scrollToBottom() {
+        if (chatbotBody) {
+            setTimeout(() => {
+                chatbotBody.scrollTop = chatbotBody.scrollHeight;
+            }, 50);
+        }
+    }
+    
+    // 모바일 최적화된 챗봇 위치 조정 함수
+    function adjustChatbotPosition() {
+        if (!chatbotContainer || !chatbotButton) return;
+        
+        const windowHeight = window.innerHeight;
+        const windowWidth = window.innerWidth;
+        const isMobile = windowWidth <= 640;
+        
+        console.log(`📱 Adjusting position - Mobile: ${isMobile}, Size: ${windowWidth}x${windowHeight}`);
+        
+        if (isMobile) {
+            // 모바일: 전체 화면 활용, 버튼을 입력 영역에서 멀리
+            const maxHeight = Math.min(windowHeight - 120, 500);
+            chatbotContainer.style.height = `${maxHeight}px`;
+            chatbotContainer.style.maxHeight = `${maxHeight}px`;
+            chatbotContainer.style.width = `calc(100vw - 20px)`;
+            chatbotContainer.style.left = '10px';
+            chatbotContainer.style.right = '10px';
+            chatbotContainer.style.bottom = '10px';
+            
+            // 모바일에서 버튼 위치 - 입력 영역과 겹치지 않게
+            chatbotButton.style.bottom = '90px';
+            chatbotButton.style.right = '15px';
+            chatbotButton.style.width = '50px';
+            chatbotButton.style.height = '50px';
+            
+            // 매우 작은 화면 대응
+            if (windowWidth <= 375) {
+                chatbotContainer.style.width = `calc(100vw - 10px)`;
+                chatbotContainer.style.left = '5px';
+                chatbotContainer.style.right = '5px';
+                chatbotButton.style.bottom = '80px';
+                chatbotButton.style.right = '10px';
+                chatbotButton.style.width = '45px';
+                chatbotButton.style.height = '45px';
+            }
+            
+            // 가로 모드 대응
+            if (windowHeight < windowWidth && windowHeight < 500) {
+                chatbotContainer.style.height = `calc(100vh - 80px)`;
+                chatbotButton.style.bottom = '70px';
+            }
+        } else {
+            // 데스크톱: 기본 설정 복원
+            chatbotContainer.style.height = `550px`;
+            chatbotContainer.style.maxHeight = `calc(100vh - 180px)`;
+            chatbotContainer.style.width = '380px';
+            chatbotContainer.style.left = 'auto';
+            chatbotContainer.style.bottom = '100px';
+            chatbotContainer.style.right = '25px';
+            
+            chatbotButton.style.bottom = '30px';
+            chatbotButton.style.right = '25px';
+            chatbotButton.style.width = '56px';
+            chatbotButton.style.height = '56px';
+        }
+    }
+    
+    // 모바일 키보드 대응 개선
+    function handleMobileKeyboard() {
+        if (window.innerWidth > 640) return;
+        
+        let initialViewportHeight = window.innerHeight;
+        let isKeyboardOpen = false;
+        
+        window.addEventListener('resize', function() {
+            const currentViewportHeight = window.innerHeight;
+            const heightDifference = initialViewportHeight - currentViewportHeight;
+            
+            // 키보드가 나타났다고 판단 (높이가 150px 이상 줄어든 경우)
+            if (heightDifference > 150 && !isKeyboardOpen) {
+                isKeyboardOpen = true;
+                console.log('📱 Mobile keyboard detected - adjusting layout');
+                
+                // 키보드가 나타나면 챗봇 컨테이너 높이 조정
+                if (chatbotContainer && chatbotContainer.classList.contains('active')) {
+                    const newHeight = Math.max(currentViewportHeight - 60, 300);
+                    chatbotContainer.style.height = `${newHeight}px`;
+                    chatbotContainer.style.maxHeight = `${newHeight}px`;
+                    chatbotContainer.style.bottom = '5px';
+                }
+                
+                // 버튼을 더 위로 이동 (하지만 챗봇이 열려있으면 이미 숨겨짐)
+                if (chatbotButton && !chatbotContainer.classList.contains('active')) {
+                    chatbotButton.style.bottom = '60px';
+                }
+                
+                // 스크롤을 맨 아래로
+                setTimeout(() => {
+                    scrollToBottom();
+                }, 100);
+                
+            } else if (heightDifference <= 100 && isKeyboardOpen) {
+                isKeyboardOpen = false;
+                console.log('📱 Mobile keyboard hidden - restoring layout');
+                
+                // 키보드가 사라지면 원래 크기로 복원
+                setTimeout(() => {
+                    adjustChatbotPosition();
+                }, 200);
+            }
+        });
+        
+        // 방향 변경 시에도 조정
+        window.addEventListener('orientationchange', function() {
+            setTimeout(() => {
+                initialViewportHeight = window.innerHeight;
+                adjustChatbotPosition();
+            }, 500);
+        });
+    }
+    
+    // 터치 이벤트 최적화 (모바일)
+    function optimizeForTouch() {
+        if (window.innerWidth > 640) return;
+        
+        // 터치 시작 시 스크롤 위치 저장
+        let touchStartScrollTop = 0;
+        
+        if (chatbotBody) {
+            chatbotBody.addEventListener('touchstart', function() {
+                touchStartScrollTop = this.scrollTop;
+            }, { passive: true });
+            
+            chatbotBody.addEventListener('touchend', function() {
+                // 터치 종료 후 약간 지연하여 스크롤 조정
+                setTimeout(() => {
+                    if (Math.abs(this.scrollTop - touchStartScrollTop) < 10) {
+                        // 스크롤이 거의 변하지 않았으면 자동으로 맨 아래로
+                        scrollToBottom();
+                    }
+                }, 100);
+            }, { passive: true });
+        }
+        
+        // 터치 시 입력 필드가 가려지지 않도록
+        if (chatbotInputField) {
+            chatbotInputField.addEventListener('touchstart', function() {
+                setTimeout(() => {
+                    this.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }, 100);
+            });
+            
+            // 포커스 시 키보드 대응
+            chatbotInputField.addEventListener('focus', function() {
+                setTimeout(() => {
+                    scrollToBottom();
+                }, 300);
+            });
+        }
+    }
+    
+    // 이벤트 리스너 등록
+    if (chatbotSend) {
+        chatbotSend.addEventListener('click', sendMessage);
+    }
+    
+    if (chatbotInputField) {
+        // 엔터 키로 메시지 전송
+        chatbotInputField.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+        
+        // 입력 중일 때도 스크롤 유지
+        chatbotInputField.addEventListener('input', function() {
+            if (chatbotBody) {
+                // 사용자가 스크롤을 위로 올리지 않았을 때만 자동 스크롤
+                const isScrolledToBottom = chatbotBody.scrollHeight - chatbotBody.clientHeight <= chatbotBody.scrollTop + 10;
+                if (isScrolledToBottom) {
+                    scrollToBottom();
+                }
+            }
+        });
+    }
+    
+    // 초기화 및 이벤트 등록
+    adjustChatbotPosition();
+    handleMobileKeyboard();
+    optimizeForTouch();
+    
+    // 윈도우 리사이즈 이벤트
+    let resizeTimer;
+    window.addEventListener('resize', function() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+            adjustChatbotPosition();
+        }, 100);
+    });
+    
+    // 페이지 로드 완료 시 위치 재조정
+    window.addEventListener('load', function() {
+        setTimeout(adjustChatbotPosition, 500);
+    });
+    
+    // 뷰포트 메타 태그가 없을 경우 추가 (모바일 최적화)
+    if (!document.querySelector('meta[name="viewport"]')) {
+        const viewport = document.createElement('meta');
+        viewport.name = 'viewport';
+        viewport.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
+        document.head.appendChild(viewport);
+        console.log('📱 Viewport meta tag added for mobile optimization');
+    }
+    
+    // 디버깅용
+    console.log('🎉 Mobile-optimized AI+X Chatbot initialized successfully');
+    console.log('📊 Final status:', {
+        loginStatus: isLoggedIn,
+        isMobile: isMobile,
+        buttonVisible: isLoggedIn,
+        buttonElement: !!chatbotButton,
+        containerElement: !!chatbotContainer,
+        windowSize: `${window.innerWidth}x${window.innerHeight}`
+    });
+});
+</script>
+    
+    
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add smooth animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+    
+    // Observe elements for animation
+    document.querySelectorAll('section').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(20px)';
+        el.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+        observer.observe(el);
+    });
+
+    // Special handling for the AI Assistant feature card
+    const aiAssistantCard = document.querySelector('.bg-gradient-to-br.from-blue-50.to-purple-50');
+    if (aiAssistantCard) {
+        aiAssistantCard.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-4px)';
+            this.style.boxShadow = '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)';
+        });
+        
+        aiAssistantCard.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+            this.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)';
+        });
+    }
+});
+
+// ✅ 챗봇 열기 함수 - 로그인된 사용자용
+function openChatbot() {
+    console.log('🖱️ openChatbot() called');
+    
+    // 로그인 상태 확인
+    const isLoggedIn = true;
+    
+    if (!isLoggedIn) {
+        console.log('⚠️ User not logged in, redirecting...');
+        redirectToLogin();
+        return;
+    }
+    
+    // 챗봇 요소 확인
+    const chatbotButton = document.getElementById('chatbot-button');
+    const chatbotContainer = document.getElementById('chatbot-container');
+    
+    if (!chatbotButton || !chatbotContainer) {
+        console.log('❌ Chatbot elements not found, waiting for initialization...');
+        
+        // 약간의 지연 후 다시 시도 (챗봇이 아직 초기화되지 않은 경우)
+        setTimeout(() => {
+            const retryButton = document.getElementById('chatbot-button');
+            const retryContainer = document.getElementById('chatbot-container');
+            
+            if (retryButton && retryContainer) {
+                console.log('✅ Chatbot elements found on retry');
+                retryContainer.classList.add('active');
+                retryButton.style.display = 'none';
+                retryButton.style.visibility = 'hidden';
+                retryButton.style.opacity = '0';
+                
+                // 입력 필드에 포커스
+                const inputField = document.getElementById('chatbot-input-field');
+                if (inputField) {
+                    setTimeout(() => {
+                        inputField.focus();
+                    }, 300);
+                }
+            } else {
+                console.log('❌ Chatbot elements still not found after retry');
+                alert('Chatbot is loading... Please try again in a moment.');
+            }
+        }, 1000);
+        
+        return;
+    }
+    
+    console.log('✅ Opening chatbot container');
+    
+    // 챗봇 컨테이너 활성화
+    chatbotContainer.classList.add('active');
+    
+    // 챗봇 버튼 완전히 숨기기
+    chatbotButton.style.display = 'none';
+    chatbotButton.style.visibility = 'hidden';
+    chatbotButton.style.opacity = '0';
+    chatbotButton.style.pointerEvents = 'none';
+    chatbotButton.classList.remove('show');
+    
+    // 입력 필드에 포커스 (모바일 고려)
+    const inputField = document.getElementById('chatbot-input-field');
+    if (inputField) {
+        const isMobile = window.innerWidth <= 640;
+        setTimeout(() => {
+            inputField.focus();
+        }, isMobile ? 500 : 300);
+    }
+    
+    console.log('🎉 Chatbot opened successfully');
+}
+
+// ✅ 로그인 페이지로 리디렉션 함수
+function redirectToLogin() {
+    console.log('🔗 Redirecting to login page');
+    
+    // 사용자에게 알림 표시
+    const confirmed = confirm('You need to sign in to use the AI Assistant. Would you like to go to the login page?');
+    
+    if (confirmed) {
+        // 현재 페이지를 next 파라미터로 전달하여 로그인 후 돌아올 수 있게 함
+        const currentUrl = encodeURIComponent(window.location.pathname + window.location.search);
+        window.location.href = `/auth/login?next=${currentUrl}`;
+    }
+}
+
+// ✅ 전역 함수로 등록 (다른 스크립트에서 호출 가능)
+window.openChatbot = openChatbot;
+window.redirectToLogin = redirectToLogin;
+
+console.log('🎯 AI Assistant button integration loaded');
+console.log('🔐 Login status:', true);
+</script>
+
+<style>
+.line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.bg-gradient-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.bg-gradient-accent {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.bg-gradient-reflection {
+    background: linear-gradient(135deg, #a855f7 0%, #c084fc 100%);
+}
+
+/* ✅ 버튼 호버 효과 개선 */
+button[onclick="openChatbot()"] {
+    transition: all 0.2s ease;
+}
+
+button[onclick="openChatbot()"]:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+button[onclick="redirectToLogin()"] {
+    transition: all 0.2s ease;
+}
+
+button[onclick="redirectToLogin()"]:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+</style>
+
+
+
+        <div class="chatbot-button show" id="chatbot-button" style="bottom: 30px; right: 25px; width: 56px; height: 56px;">
+            <i class="fas fa-comment-dots fa-lg"></i>
+        </div>
+        
+        <div class="chatbot-container" id="chatbot-container" style="height: 550px; max-height: calc(-180px + 100vh); width: 380px; left: auto; bottom: 100px; right: 25px;">
+            <div class="chatbot-header">
+                <h3>AI+X Assistant</h3>
+                <button class="chatbot-close" id="chatbot-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="chatbot-body" id="chatbot-body">
+                <div class="chat-bubble bot-message">
+                    <div class="bot-message-header">
+                        <button class="copy-button" title="Copy message">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                    <div class="response-content">
+                        Hello! I'm your AI+X Assistant. I can help you with Brain Building, Project Management, Reflection Journals, and platform navigation. How can I assist you today?
+                    </div>
+                    <div class="message-time">Just now</div>
+                </div>
+            </div>
+            
+            <div class="chatbot-input">
+                <input type="text" id="chatbot-input-field" placeholder="Ask me anything...">
+                <button id="chatbot-send">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </body></html>
